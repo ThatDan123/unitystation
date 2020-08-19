@@ -23,6 +23,16 @@ public class GUI_Filter : NetTab
 		{"PLS",Gas.Plasma},
 		{"CO2",Gas.CarbonDioxide},
 		{"NO2",Gas.NitrousOxide},
+		{"H2",Gas.Hydrogen},
+		{"H2O",Gas.WaterVapor},
+		{"BZ",Gas.BZ},
+		{"Mia",Gas.Miasma},
+		{"Nit",Gas.Nitryl},
+		{"Trit",Gas.Tritium},
+		{"HN",Gas.HyperNoblium},
+		{"ST",Gas.Stimulum},
+		{"Pluox",Gas.Pluoxium},
+		{"Freon",Gas.Freon},
 	};
 
 

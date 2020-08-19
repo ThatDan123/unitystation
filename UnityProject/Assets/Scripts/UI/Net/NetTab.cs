@@ -38,6 +38,7 @@ public enum NetTabType
 	Jukebox = 27,
 	Filter = 28,
 	Mixer = 29,
+	FilterAdvanced = 30,
 
 	//add your tabs here
 }
