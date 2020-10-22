@@ -231,7 +231,7 @@ public class NetTab : Tab
 		{
 			bool canApply = Validations.CanApply(peeper.Script, Provider, NetworkSide.Server);
 
-			if (!peeper.Script || !canApply)
+			if (!peeper.Script || (!canApply && !peeper.Script.IsAI))
 			{
 				TabUpdateMessage.Send(peeper.GameObject, Provider, Type, TabAction.Close);
 			}

@@ -92,8 +92,8 @@ namespace Objects
 				Inventory.ServerDespawn(interaction.HandSlot);
 				Chat.AddActionMsgToChat(interaction.Performer, restockMessage, restockMessage);
 			}
-			if (Validations.HasItemTrait(interaction.HandObject, CommonTraits.Instance.Emag)  
-				&& interaction.HandObject.TryGetComponent<Emag>(out var emag) 
+			if (Validations.HasItemTrait(interaction.HandObject, CommonTraits.Instance.Emag)
+				&& interaction.HandObject.TryGetComponent<Emag>(out var emag)
 				&& emag.EmagHasCharges())
 			{
 				isEmagged = true;
@@ -162,7 +162,7 @@ namespace Objects
 			if (player != null && accessRestrictions && !isEmagged)
 			{
 				var hasAccess = accessRestrictions.CheckAccess(player.GameObject);
-				if (!hasAccess)
+				if (!hasAccess && !player.Script.IsAI)
 				{
 					Chat.AddWarningMsgFromServer(player.GameObject, noAccessMessage);
 					return false;

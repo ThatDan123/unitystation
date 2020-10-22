@@ -32,6 +32,7 @@ public static class PlayerSpawn
 
 		// TODO: add a nice cutscene/animation for the respawn transition
 		var newPlayer = ServerSpawnInternal(conn, occupation, characterSettings, null);
+
 		if (newPlayer != null && occupation.IsCrewmember)
 		{
 			CrewManifestManager.Instance.AddMember(newPlayer.GetComponent<PlayerScript>(), occupation.JobType);
@@ -154,8 +155,10 @@ public static class PlayerSpawn
 			spawnPos = spawnTransform.transform.position.CutToInt();
 		}
 
+		var playerPrefab = occupation.SpecialPlayerPrefab;
+
 		//create the player object
-		var newPlayer = ServerCreatePlayer(spawnPos.GetValueOrDefault());
+		var newPlayer = ServerCreatePlayer(spawnPos.GetValueOrDefault(), playerPrefab);
 		var newPlayerScript = newPlayer.GetComponent<PlayerScript>();
 
 		//get the old body if they have one.
@@ -354,7 +357,7 @@ public static class PlayerSpawn
 	/// <param name="occupation">occupation to spawn as</param>
 	/// <param name="characterSettings">settings to use for the character</param>
 	/// <returns></returns>
-	private static GameObject ServerCreatePlayer(Vector3Int spawnWorldPosition)
+	private static GameObject ServerCreatePlayer(Vector3Int spawnWorldPosition, GameObject playerPrefab = null)
 	{
 		//player is only spawned on server, we don't sync it to other players yet
 		var spawnPosition = spawnWorldPosition;
@@ -362,9 +365,14 @@ public static class PlayerSpawn
 		var parentNetId = matrixInfo.NetID;
 		var parentTransform = matrixInfo.Objects;
 
+		if (playerPrefab == null)
+		{
+			playerPrefab = CustomNetworkManager.Instance.humanPlayerPrefab;
+		}
+
 		//using parentTransform.rotation rather than Quaternion.identity because objects should always
 		//be upright w.r.t.  localRotation, NOT world rotation
-		var player = UnityEngine.Object.Instantiate(CustomNetworkManager.Instance.humanPlayerPrefab,
+		var player = UnityEngine.Object.Instantiate(playerPrefab,
 			spawnPosition, parentTransform.rotation,
 			parentTransform);
 		player.GetComponent<PlayerScript>().registerTile.ServerSetNetworkedMatrixNetID(parentNetId);

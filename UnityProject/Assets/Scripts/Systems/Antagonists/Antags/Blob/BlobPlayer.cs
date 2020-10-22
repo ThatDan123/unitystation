@@ -203,8 +203,6 @@ namespace Blob
 			playerScript.characterSettings.Name = name;
 			playerScript.playerName = name;
 
-			playerScript.IsPlayerSemiGhost = true;
-
 			var result = Spawn.ServerPrefab(blobCorePrefab, playerSync.ServerPosition, gameObject.transform);
 
 			if (!result.Successful)
@@ -430,7 +428,7 @@ namespace Blob
 		{
 			TurnOnClientLight();
 			playerScript.IsPlayerSemiGhost = true;
-			PlayerManager.LocalPlayerScript.IsPlayerSemiGhost = true;
+			playerScript.IsBlob = true;
 		}
 
 		public void TurnOnClientLight()
@@ -445,7 +443,7 @@ namespace Blob
 		private void TargetRpcTurnOffBlob(NetworkConnection target)
 		{
 			playerScript.IsPlayerSemiGhost = false;
-			PlayerManager.LocalPlayerScript.IsPlayerSemiGhost = false;
+			playerScript.IsBlob = false;
 		}
 
 		[TargetRpc]
@@ -1067,7 +1065,6 @@ namespace Blob
 					"The biohazard has been contained."),
 				MatrixManager.MainStationMatrix);
 
-			playerScript.IsPlayerSemiGhost = false;
 			TargetRpcTurnOffBlob(connectionToClient);
 
 			//Make blob into ghost

@@ -552,6 +552,12 @@ public class ControlTabs : MonoBehaviour
 		var toClose = new List<NetTab>();
 		var toDestroy = new List<NetTab>();
 		var playerScript = PlayerManager.LocalPlayerScript;
+		var reach = ReachRange.Standard;
+
+		if (playerScript != null && playerScript.IsAI)
+		{
+			reach = ReachRange.Unlimited;
+		}
 
 		foreach (NetTab tab in Instance.OpenedNetTabs.Values)
 		{
@@ -560,8 +566,10 @@ public class ControlTabs : MonoBehaviour
 			{
 				toDestroy.Add(tab);
 			}
-			else if ( !Validations.CanApply(PlayerManager.LocalPlayerScript, tab.Provider, NetworkSide.Client))
+			else if ( !Validations.CanApply(PlayerManager.LocalPlayerScript, tab.Provider, NetworkSide.Client, reachRange: reach))
 			{
+				if(UIManager.Hands.CurrentSlot == null) continue;
+
 				//Make sure the item is not in the players hands first:
 				if (UIManager.Hands.CurrentSlot.Item != tab.Provider.gameObject &&
 					UIManager.Hands.OtherSlot.Item != tab.Provider.gameObject)

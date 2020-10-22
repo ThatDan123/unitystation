@@ -234,7 +234,12 @@ namespace Objects.Atmospherics
 			EjectInsertedContainer();
 
 			var playerScript = networkTab.LastInteractedPlayer().GetComponent<PlayerScript>();
-			var bestHand = playerScript.ItemStorage.GetBestHand();
+
+			var storage = playerScript.ItemStorage;
+
+			if(storage == null) return;
+
+			var bestHand = storage.GetBestHand();
 			if (bestHand != null)
 			{
 				Inventory.ServerAdd(gasContainer, bestHand);

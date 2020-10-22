@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using AI;
 using Mirror;
 using ScriptableObjects;
 using Tilemaps.Behaviours.Meta;
@@ -411,19 +412,30 @@ public partial class Chat
 		if (NetworkIdentity.spawned.ContainsKey(originator))
 		{
 			var getOrigin = NetworkIdentity.spawned[originator];
+			var pos = PlayerManager.LocalPlayer.transform.position;
+
+			if (PlayerManager.PlayerScript.IsAI)
+			{
+				var core = PlayerManager.PlayerScript.GetComponent<AiPlayer>().aiCore;
+
+				if (core != null)
+				{
+					pos = core.transform.position;
+				}
+			}
+
 			if (channels == ChatChannel.Local || channels == ChatChannel.Combat
 			                                  || channels == ChatChannel.Action)
 			{
 				LayerMask layerMask = LayerMask.GetMask("Door Closed");
-				if (Vector2.Distance(getOrigin.transform.position,
-					PlayerManager.LocalPlayer.transform.position) > 14f)
+				if (Vector2.Distance(getOrigin.transform.position,pos) > 14f)
 				{
 					return true;
 				}
 				else
 				{
 					if (MatrixManager.RayCast(getOrigin.transform.position, Vector2.zero, 0, LayerTypeSelection.Walls,
-						layerMask, PlayerManager.LocalPlayer.transform.position).ItHit)
+						layerMask, pos).ItHit)
 					{
 						return true;
 					}

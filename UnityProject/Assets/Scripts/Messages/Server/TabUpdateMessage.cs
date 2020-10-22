@@ -123,7 +123,7 @@ public class TabUpdateMessage : ServerMessage
 				//fixme: duplication of NetTab.ValidatePeepers
 				//Not sending updates and closing tab for players that don't pass the validation anymore
 				var validate = Validations.CanApply(recipient, provider, NetworkSide.Server);
-				if (!validate)
+				if (!validate && !recipient.GetComponent<PlayerScript>().IsAI)
 				{
 					Send(recipient, provider, type, TabAction.Close);
 					return null;

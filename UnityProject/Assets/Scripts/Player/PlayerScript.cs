@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mirror;
 using System;
+using AI;
 using Audio.Managers;
 using Blob;
 using Objects;
@@ -11,6 +12,9 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 	public const float interactionDistance = 1.5f;
 
 	public Mind mind;
+
+	[Tooltip("Ui needed or this player")]
+	public GameObject Ui;
 
 	/// <summary>
 	/// Current character settings for this player.
@@ -208,6 +212,13 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 		if (GetComponent<BlobPlayer>() != null)
 		{
 			IsPlayerSemiGhost = true;
+			IsBlob = true;
+		}
+
+		if (GetComponent<AiPlayer>() != null)
+		{
+			IsPlayerSemiGhost = true;
+			IsAI = true;
 		}
 	}
 
@@ -252,7 +263,7 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 				//stop the crit notification and change overlay to ghost mode
 				SoundManager.Stop("Critstate");
 				UIManager.PlayerHealthUI.heartMonitor.overlayCrits.SetState(OverlayState.death);
-				//show ghosts
+				//hide ghosts
 				var mask = Camera2DFollow.followControl.cam.cullingMask;
 				mask &= ~(1 << LayerMask.NameToLayer("Ghosts"));
 				Camera2DFollow.followControl.cam.cullingMask = mask;
@@ -294,6 +305,10 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 	[HideInInspector]
 	//If the player acts like a ghost but is still playing ingame, used for blobs and in the future maybe AI.
 	public bool IsPlayerSemiGhost;
+
+	public bool IsBlob;
+
+	public bool IsAI;
 
 	public object Chat { get; internal set; }
 
@@ -340,7 +355,7 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 			return ghostTransmitChannels | ghostReceiveChannels;
 		}
 
-		if (IsPlayerSemiGhost)
+		if (IsBlob)
 		{
 			ChatChannel blobTransmitChannels = ChatChannel.Blob | ChatChannel.OOC;
 			ChatChannel blobReceiveChannels = ChatChannel.Examine | ChatChannel.System | ChatChannel.Combat;
@@ -351,6 +366,19 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 			}
 
 			return blobTransmitChannels | blobReceiveChannels;
+		}
+
+		if (IsAI)
+		{
+			ChatChannel aiTransmitChannels = ChatChannel.Binary | ChatChannel.OOC;
+			ChatChannel aiReceiveChannels = ChatChannel.System;
+
+			if (transmitOnly)
+			{
+				return aiTransmitChannels;
+			}
+
+			return aiTransmitChannels | aiReceiveChannels;
 		}
 
 		//TODO: Checks if player can speak (is not gagged, unconcious, has no mouth)

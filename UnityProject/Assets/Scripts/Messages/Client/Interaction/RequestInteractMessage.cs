@@ -56,6 +56,8 @@ public class RequestInteractMessage : ClientMessage
 	public Connection connectionPointA, connectionPointB;
 	// Requested option of a right-click context menu interaction
 	public string RequestedOption;
+	//click type for AI
+	public AiActivate.ClickTypes clickTypes;
 
 	private static readonly Dictionary<ushort, Type> componentIDToComponentType = new Dictionary<ushort, Type>();
 	private static readonly Dictionary<Type, ushort> componentTypeToComponentID = new Dictionary<Type, ushort>();
@@ -110,10 +112,23 @@ public class RequestInteractMessage : ClientMessage
 	{
 		var performer = SentByPlayer.GameObject;
 
-		if (SentByPlayer == null || SentByPlayer.Script == null || SentByPlayer.Script.ItemStorage == null)
+		if (SentByPlayer == null || SentByPlayer.Script == null)
 		{
 			return;
 		}
+
+		if (InteractionType == typeof(AiActivate))
+		{
+			LoadMultipleObjects(new uint[] { TargetObject, ProcessorObject });
+			var targetObj = NetworkObjects[0];
+			var processorObj = NetworkObjects[1];
+
+			var interaction = new AiActivate(performer, null, targetObj, Intent, clickTypes);
+			ProcessInteraction(interaction, processorObj);
+			return;
+		}
+
+		if(SentByPlayer.Script.ItemStorage == null) return;
 
 		if (InteractionType == typeof(PositionalHandApply))
 		{
@@ -472,6 +487,12 @@ public class RequestInteractMessage : ClientMessage
 			msg.TargetObject = casted.TargetObject.NetId();
 			msg.RequestedOption = casted.RequestedOption;
 		}
+		else if (typeof(T) == typeof(AiActivate))
+		{
+			var casted = interaction as AiActivate;
+			msg.TargetObject = casted.TargetObject.NetId();
+			msg.clickTypes = casted.ClickType;
+		}
 		msg.Send();
 	}
 
@@ -606,6 +627,11 @@ public class RequestInteractMessage : ClientMessage
 			TargetObject = reader.ReadUInt32();
 			RequestedOption = reader.ReadString();
 		}
+		else if (InteractionType == typeof(AiActivate))
+		{
+			TargetObject = reader.ReadUInt32();
+			clickTypes = (AiActivate.ClickTypes) reader.ReadInt32();
+		}
 	}
 
 	public override void Serialize(NetworkWriter writer)
@@ -678,6 +704,11 @@ public class RequestInteractMessage : ClientMessage
 		{
 			writer.WriteUInt32(TargetObject);
 			writer.WriteString(RequestedOption);
+		}
+		else if (InteractionType == typeof(AiActivate))
+		{
+			writer.WriteUInt32(TargetObject);
+			writer.WriteInt32((int) clickTypes);
 		}
 	}
 }

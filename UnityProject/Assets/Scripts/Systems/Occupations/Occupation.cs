@@ -126,4 +126,7 @@ public class Occupation : ScriptableObject
 	[SerializeField] private bool isTargeteable=true;
 
 	public bool IsTargeteable => isTargeteable;
+
+	[Header("If used will spawn player using this prefab instead of human body.")]
+	public GameObject SpecialPlayerPrefab = null;
 }

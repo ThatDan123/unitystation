@@ -8,7 +8,7 @@ using Objects.Wallmounts;
 
 namespace Doors
 {
-	public class DoorController : NetworkBehaviour, IServerSpawn, ISetMultitoolSlave
+	public class DoorController : NetworkBehaviour, IServerSpawn, ISetMultitoolSlave, IAiInteractable<AiActivate>
 	{
 		//public bool isWindowed = false;
 		public enum OpeningDirection
@@ -644,6 +644,27 @@ namespace Doors
 		public void OnSpawnServer(SpawnInfo info)
 		{
 
+		}
+
+		//Ai interaction
+		public bool WillInteract(AiActivate interaction, NetworkSide side)
+		{
+			if (interaction.ClickType != AiActivate.ClickTypes.ShiftClick) return false;
+
+			return true;
+		}
+
+		//Ai interaction
+		public void ServerPerformInteraction(AiActivate interaction)
+		{
+			if (IsClosed)
+			{
+				TryOpen();
+			}
+			else
+			{
+				TryClose();
+			}
 		}
 	}
 }

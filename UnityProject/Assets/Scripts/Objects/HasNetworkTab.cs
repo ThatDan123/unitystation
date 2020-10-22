@@ -9,7 +9,7 @@ namespace Objects
 	/// please ensure this component is placed below them, otherwise the tab open/close will
 	/// be the interaction that always takes precedence.
 	/// </summary>
-	public class HasNetworkTab : MonoBehaviour, ICheckedInteractable<HandApply>, IServerDespawn
+	public class HasNetworkTab : MonoBehaviour, ICheckedInteractable<HandApply>, IServerDespawn, IAiInteractable<AiActivate>
 	{
 		[NonSerialized] private GameObject playerInteracted;
 
@@ -45,6 +45,23 @@ namespace Objects
 		public void OnDespawnServer(DespawnInfo info)
 		{
 			NetworkTabManager.Instance.RemoveTab(gameObject, NetTabType);
+		}
+
+		//Ai interaction
+		public bool WillInteract(AiActivate interaction, NetworkSide side)
+		{
+			if (interaction.ClickType != AiActivate.ClickTypes.NormalClick) return false;
+
+			playerInteracted = interaction.Performer;
+
+			return true;
+		}
+
+		//Ai interaction
+		public void ServerPerformInteraction(AiActivate interaction)
+		{
+			playerInteracted = interaction.Performer;
+			TabUpdateMessage.Send(interaction.Performer, gameObject, NetTabType, TabAction.Open);
 		}
 	}
 }
