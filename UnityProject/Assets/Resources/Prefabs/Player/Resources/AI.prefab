@@ -57,11 +57,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  Ui: {fileID: 0}
   playerName: ' '
   visibleName: ' '
   RTT: 0
   RcsMode: 0
   IsPlayerSemiGhost: 0
+  IsBlob: 0
+  IsAI: 0
 --- !u!114 &4504212478988223552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,6 +241,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  aiCorePrefab: {fileID: 1628816798482564540, guid: 78d864368ace6814584390b1cd5f8151,
+    type: 3}
+  aiCore: {fileID: 0}
 --- !u!1 &7320126117105815585
 GameObject:
   m_ObjectHideFlags: 0

@@ -370,8 +370,12 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 
 		if (IsAI)
 		{
-			ChatChannel aiTransmitChannels = ChatChannel.Binary | ChatChannel.OOC;
-			ChatChannel aiReceiveChannels = ChatChannel.System;
+			ChatChannel aiTransmitChannels = ChatChannel.Binary | ChatChannel.Command | ChatChannel.Common | ChatChannel.Engineering |
+				ChatChannel.Medical | ChatChannel.Science | ChatChannel.Security | ChatChannel.Service
+				| ChatChannel.Supply | ChatChannel.OOC;
+			ChatChannel aiReceiveChannels = ChatChannel.Binary | ChatChannel.System | ChatChannel.Command | ChatChannel.Common | ChatChannel.Engineering |
+			                                ChatChannel.Medical | ChatChannel.Science | ChatChannel.Security | ChatChannel.Service
+			                                | ChatChannel.Supply;
 
 			if (transmitOnly)
 			{
