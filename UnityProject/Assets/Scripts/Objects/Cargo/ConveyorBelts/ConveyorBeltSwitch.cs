@@ -10,7 +10,8 @@ namespace Construction.Conveyors
 	/// <summary>
 	/// Used for controlling conveyor belts.
 	/// </summary>
-	public class ConveyorBeltSwitch : NetworkBehaviour, ICheckedInteractable<HandApply>, ISetMultitoolSlaveMultiMaster
+	public class ConveyorBeltSwitch : NetworkBehaviour, ICheckedInteractable<HandApply>, ISetMultitoolSlaveMultiMaster,
+		IAiInteractable<AiActivate>
 	{
 		[Tooltip("Assign the conveyor belts this switch should control.")]
 		[SerializeField]
@@ -88,6 +89,20 @@ namespace Construction.Conveyors
 			{
 				ToggleSwitch();
 			}
+		}
+
+		//Ai interaction
+		public bool WillInteract(AiActivate interaction, NetworkSide side)
+		{
+			if (interaction.ClickType != AiActivate.ClickTypes.NormalClick) return false;
+
+			return true;
+		}
+
+		//Ai interaction
+		public void ServerPerformInteraction(AiActivate interaction)
+		{
+			ToggleSwitch();
 		}
 
 		private void ToggleSwitch()

@@ -14,7 +14,7 @@ public enum BatteryStateSprite
 
 namespace Objects.Engineering
 {
-	public class DepartmentBattery : NetworkBehaviour, ICheckedInteractable<HandApply>, INodeControl
+	public class DepartmentBattery : NetworkBehaviour, ICheckedInteractable<HandApply>, INodeControl, IAiInteractable<AiActivate>
 	{
 		public DepartmentBatterySprite CurrentSprite = DepartmentBatterySprite.Default;
 		public SpriteRenderer Renderer;
@@ -143,6 +143,21 @@ namespace Objects.Engineering
 		}
 
 		public void ServerPerformInteraction(HandApply interaction)
+		{
+			isOn = !isOn;
+			UpdateServerState();
+		}
+
+		//Ai interaction
+		public bool WillInteract(AiActivate interaction, NetworkSide side)
+		{
+			if (interaction.ClickType != AiActivate.ClickTypes.NormalClick) return false;
+
+			return true;
+		}
+
+		//Ai interaction
+		public void ServerPerformInteraction(AiActivate interaction)
 		{
 			isOn = !isOn;
 			UpdateServerState();

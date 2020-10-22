@@ -13,7 +13,8 @@ namespace Objects.Wallmounts
 	/// Allows object to function as a door switch - opening / closing door when clicked.
 	/// </summary>
 	[ExecuteInEditMode]
-	public class DoorSwitch : SubscriptionController, ICheckedInteractable<HandApply>, ISetMultitoolMaster, IServerSpawn
+	public class DoorSwitch : SubscriptionController, ICheckedInteractable<HandApply>, ISetMultitoolMaster, IServerSpawn,
+		IAiInteractable<AiActivate>
 	{
 		private SpriteRenderer spriteRenderer;
 		public Sprite greenSprite;
@@ -118,7 +119,21 @@ namespace Objects.Wallmounts
 
 			RunDoorController();
 			RpcPlayButtonAnim(true);
+		}
 
+		//Ai interaction
+		public bool WillInteract(AiActivate interaction, NetworkSide side)
+		{
+			if (interaction.ClickType != AiActivate.ClickTypes.NormalClick) return false;
+
+			return true;
+		}
+
+		//Ai interaction
+		public void ServerPerformInteraction(AiActivate interaction)
+		{
+			RunDoorController();
+			RpcPlayButtonAnim(true);
 		}
 
 		private void RunDoorController()
