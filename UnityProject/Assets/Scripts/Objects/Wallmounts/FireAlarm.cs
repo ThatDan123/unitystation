@@ -9,7 +9,8 @@ using Doors;
 
 namespace Objects.Wallmounts
 {
-	public class FireAlarm : SubscriptionController, IServerLifecycle, ICheckedInteractable<HandApply>, ISetMultitoolMaster
+	public class FireAlarm : SubscriptionController, IServerLifecycle, ICheckedInteractable<HandApply>, ISetMultitoolMaster,
+		IAiInteractable<AiActivate>
 	{
 		public List<FireLock> FireLockList = new List<FireLock>();
 		private MetaDataNode metaNode;
@@ -176,25 +177,44 @@ namespace Objects.Wallmounts
 			}
 			else
 			{
-				if (activated && !isInCooldown)
-				{
-					activated = false;
-					stateSync = FireAlarmState.TopLightSpriteNormal;
-					StartCoroutine(SwitchCoolDown());
-					foreach (var firelock in FireLockList)
-					{
-						if (firelock == null) continue;
-						var controller = firelock.Controller;
-						if (controller == null) continue;
+				InternalTryOpen();
+			}
+		}
 
-						controller.TryOpen();
-					}
-				}
-				else
+		private void InternalTryOpen()
+		{
+			if (activated && !isInCooldown)
+			{
+				activated = false;
+				stateSync = FireAlarmState.TopLightSpriteNormal;
+				StartCoroutine(SwitchCoolDown());
+				foreach (var firelock in FireLockList)
 				{
-					SendCloseAlerts();
+					if (firelock == null) continue;
+					var controller = firelock.Controller;
+					if (controller == null) continue;
+
+					controller.TryOpen();
 				}
 			}
+			else
+			{
+				SendCloseAlerts();
+			}
+		}
+
+		//Ai interaction
+		public bool WillInteract(AiActivate interaction, NetworkSide side)
+		{
+			if (interaction.ClickType != AiActivate.ClickTypes.NormalClick) return false;
+
+			return true;
+		}
+
+		//Ai interaction
+		public void ServerPerformInteraction(AiActivate interaction)
+		{
+			InternalTryOpen();
 		}
 
 		private IEnumerator SwitchCoolDown()
