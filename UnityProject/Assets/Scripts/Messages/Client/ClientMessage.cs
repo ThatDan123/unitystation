@@ -2,7 +2,7 @@
 
 namespace Messages.Client
 {
-	public abstract class ClientMessage : GameMessageBase
+	public class ClientMessage : GameMessageBase
 	{
 		/// <summary>
 		/// Player that sent this ClientMessage.

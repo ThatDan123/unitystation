@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using Mirror;
 
-public abstract class GameMessageBase : NetworkMessage
+public class GameMessageBase : NetworkMessage
 {
 	public GameObject NetworkObject;
 	public GameObject[] NetworkObjects;
@@ -18,7 +18,10 @@ public abstract class GameMessageBase : NetworkMessage
 		b.Process(sentBy);
 	}
 
-	public abstract void Process();
+	public virtual void Process()
+	{
+
+	}
 
 	public virtual void Process( NetworkConnection sentBy )
 	{

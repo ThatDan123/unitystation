@@ -40,19 +40,26 @@ public class RequestObserverRefresh : ClientMessage
 		{
 			NewSceneNameContext = newSceneNameContext
 		};
+
 		msg.Send();
 		return msg;
 	}
+}
 
-	// public override void Deserialize(NetworkReader reader)
-	// {
-	// 	base.Deserialize(reader);
-	// 	NewSceneNameContext = reader.ReadString();
-	// }
-	//
-	// public override void Serialize(NetworkWriter writer)
-	// {
-	// 	base.Serialize(writer);
-	// 	writer.WriteString(NewSceneNameContext);
-	// }
+public static class RequestObserverRefreshMessageFunctions
+{
+	public static void Serialize(this NetworkWriter writer, RequestObserverRefresh value)
+	{
+		writer.WriteString(value.NewSceneNameContext);
+	}
+
+	public static RequestObserverRefresh Deserialize(this NetworkReader reader)
+	{
+		RequestObserverRefresh value = new RequestObserverRefresh
+		{
+			NewSceneNameContext = reader.ReadString()
+		};
+
+		return value;
+	}
 }

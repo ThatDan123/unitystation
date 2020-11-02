@@ -6,7 +6,7 @@ using Mirror;
 ///     Represents a network message sent from the server to clients.
 ///     Sending a message will invoke the Process() method on the client.
 /// </summary>
-public abstract class ServerMessage : GameMessageBase
+public class ServerMessage : GameMessageBase
 {
 	public void SendToAll()
 	{
