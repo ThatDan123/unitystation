@@ -44,15 +44,15 @@ public class RequestObserverRefresh : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		NewSceneNameContext = reader.ReadString();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteString(NewSceneNameContext);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	NewSceneNameContext = reader.ReadString();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteString(NewSceneNameContext);
+	// }
 }

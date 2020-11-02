@@ -42,7 +42,8 @@ public partial class SubSceneManager
 
 		}
 
-		netIdentity.isDirty = true;
+		//might not be needed now?
+		//netIdentity.isDirty = true;
 
 		yield return WaitFor.Seconds(0.1f);
 		UIManager.Display.preRoundWindow.CloseMapLoadingPanel();
@@ -261,7 +262,7 @@ public partial class SubSceneManager
 			SceneName = pickedScene,
 			SceneType = SceneType.AdditionalScenes
 		});
-		
+
 		PokeClientSubScene.SendToAll(pickedScene);
 
 		WizardLoaded = true;

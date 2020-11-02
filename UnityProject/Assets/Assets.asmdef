@@ -15,7 +15,8 @@
         "Logger",
         "GameInfo",
         "Lighting",
-        "LeanTween"
+        "LeanTween",
+        "Telepathy"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

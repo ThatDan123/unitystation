@@ -176,34 +176,34 @@ public class SetActionUIMessage : ServerMessage
 	}
 
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-
-		actionListID = reader.ReadUInt16();
-		spellListIndex = reader.ReadInt16();
-		SpriteLocation = reader.ReadInt32();
-		ComponentLocation = reader.ReadInt32();
-		NetObject = reader.ReadUInt32();
-		showAlert = reader.ReadBoolean();
-		cooldown = reader.ReadSingle();
-		ComponentType = RequestGameAction.componentIDToComponentType[reader.ReadUInt16()];
-		ProposedAction = (UpdateType) reader.ReadInt32();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt16(actionListID);
-		writer.WriteInt16(spellListIndex);
-		writer.WriteInt32(SpriteLocation);
-		writer.WriteInt32(ComponentLocation);
-		writer.WriteUInt32(NetObject);
-		writer.WriteBoolean(showAlert);
-		writer.WriteSingle(cooldown);
-		writer.WriteUInt16(RequestGameAction.componentTypeToComponentID[ComponentType]);
-		writer.WriteInt32((int) ProposedAction);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	//
+	// 	actionListID = reader.ReadUInt16();
+	// 	spellListIndex = reader.ReadInt16();
+	// 	SpriteLocation = reader.ReadInt32();
+	// 	ComponentLocation = reader.ReadInt32();
+	// 	NetObject = reader.ReadUInt32();
+	// 	showAlert = reader.ReadBoolean();
+	// 	cooldown = reader.ReadSingle();
+	// 	ComponentType = RequestGameAction.componentIDToComponentType[reader.ReadUInt16()];
+	// 	ProposedAction = (UpdateType) reader.ReadInt32();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt16(actionListID);
+	// 	writer.WriteInt16(spellListIndex);
+	// 	writer.WriteInt32(SpriteLocation);
+	// 	writer.WriteInt32(ComponentLocation);
+	// 	writer.WriteUInt32(NetObject);
+	// 	writer.WriteBoolean(showAlert);
+	// 	writer.WriteSingle(cooldown);
+	// 	writer.WriteUInt16(RequestGameAction.componentTypeToComponentID[ComponentType]);
+	// 	writer.WriteInt32((int) ProposedAction);
+	// }
 	public enum UpdateType
 	{
 		StateChange,

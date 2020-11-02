@@ -33,19 +33,19 @@ public class RequestToViewObjectsAtTile : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Location = reader.ReadVector3();
-		AdminId = reader.ReadString();
-		AdminToken = reader.ReadString();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteVector3(Location);
-		writer.WriteString(AdminId);
-		writer.WriteString(AdminToken);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Location = reader.ReadVector3();
+	// 	AdminId = reader.ReadString();
+	// 	AdminToken = reader.ReadString();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteVector3(Location);
+	// 	writer.WriteString(AdminId);
+	// 	writer.WriteString(AdminToken);
+	// }
 }

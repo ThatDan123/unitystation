@@ -39,25 +39,25 @@ public class OpenPageValueNetMessage : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		PageID = reader.ReadUInt64();
-		SentenceID = reader.ReadUInt32();
-		ISSentence = reader.ReadBoolean();
-		iskey = reader.ReadBoolean();
-		AdminId = reader.ReadString();
-		AdminToken = reader.ReadString();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt64(PageID);
-		writer.WriteUInt32(SentenceID);
-		writer.WriteBoolean(ISSentence);
-		writer.WriteBoolean(iskey);
-		writer.WriteString(AdminId);
-		writer.WriteString(AdminToken);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	PageID = reader.ReadUInt64();
+	// 	SentenceID = reader.ReadUInt32();
+	// 	ISSentence = reader.ReadBoolean();
+	// 	iskey = reader.ReadBoolean();
+	// 	AdminId = reader.ReadString();
+	// 	AdminToken = reader.ReadString();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt64(PageID);
+	// 	writer.WriteUInt32(SentenceID);
+	// 	writer.WriteBoolean(ISSentence);
+	// 	writer.WriteBoolean(iskey);
+	// 	writer.WriteString(AdminId);
+	// 	writer.WriteString(AdminToken);
+	// }
 }

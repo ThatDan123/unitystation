@@ -14,7 +14,7 @@ namespace Assets.Scripts.Messages.Server.SoundMessages
 
 		// AudioSourceParameters to apply
 		public AudioSourceParameters AudioSourceParameters;
-		
+
 		public override void Process()
 		{
 			SoundManager.ChangeAudioSourceParameters(SoundName, AudioSourceParameters);
@@ -64,16 +64,16 @@ namespace Assets.Scripts.Messages.Server.SoundMessages
 			return $"{nameof(SoundName)}: {SoundName}, {nameof(AudioSourceParameters)}: {audioSourceParametersValue}";
 		}
 
-		public override void Serialize(NetworkWriter writer)
-		{
-			writer.WriteString(SoundName);
-			writer.WriteString(JsonConvert.SerializeObject(AudioSourceParameters));
-		}
-
-		public override void Deserialize(NetworkReader reader)
-		{
-			SoundName = reader.ReadString();
-			AudioSourceParameters = JsonConvert.DeserializeObject<AudioSourceParameters>(reader.ReadString());
-		}
+		// public override void Serialize(NetworkWriter writer)
+		// {
+		// 	writer.WriteString(SoundName);
+		// 	writer.WriteString(JsonConvert.SerializeObject(AudioSourceParameters));
+		// }
+		//
+		// public override void Deserialize(NetworkReader reader)
+		// {
+		// 	SoundName = reader.ReadString();
+		// 	AudioSourceParameters = JsonConvert.DeserializeObject<AudioSourceParameters>(reader.ReadString());
+		// }
 	}
 }

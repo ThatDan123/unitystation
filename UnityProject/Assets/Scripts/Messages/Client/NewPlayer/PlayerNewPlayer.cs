@@ -28,15 +28,15 @@ public class PlayerNewPlayer: ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Player = reader.ReadUInt32();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt32(Player);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Player = reader.ReadUInt32();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt32(Player);
+	// }
 }

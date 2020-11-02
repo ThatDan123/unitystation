@@ -121,21 +121,21 @@ public class TabInteractMessage : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		TabProvider = reader.ReadUInt32();
-		NetTabType = (NetTabType) reader.ReadInt32();
-		ElementId = reader.ReadString();
-		ElementValue = reader.ReadBytesAndSize();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt32(TabProvider);
-		writer.WriteInt32((int) NetTabType);
-		writer.WriteString(ElementId);
-		writer.WriteBytesAndSize(ElementValue);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	TabProvider = reader.ReadUInt32();
+	// 	NetTabType = (NetTabType) reader.ReadInt32();
+	// 	ElementId = reader.ReadString();
+	// 	ElementValue = reader.ReadBytesAndSize();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt32(TabProvider);
+	// 	writer.WriteInt32((int) NetTabType);
+	// 	writer.WriteString(ElementId);
+	// 	writer.WriteBytesAndSize(ElementValue);
+	// }
 }

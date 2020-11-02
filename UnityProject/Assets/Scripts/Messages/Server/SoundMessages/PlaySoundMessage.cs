@@ -42,7 +42,7 @@ namespace Assets.Scripts.Messages.Server.SoundMessages
 			{
 				SoundManager.Play(SoundName, AudioSourceParameters, Polyphonic);
 			}
-		
+
 			if (ShakeParameters != null && ShakeParameters.ShakeGround)
 			{
 				if (isPositionProvided
@@ -156,24 +156,24 @@ namespace Assets.Scripts.Messages.Server.SoundMessages
 			return $"{nameof(SoundName)}: {SoundName}, {nameof(Position)}: {Position}, {nameof(Polyphonic)}: {Polyphonic}, {nameof(ShakeParameters)}: {shakeParametersValue}, {nameof(AudioSourceParameters)}: {audioSourceParametersValue}";
 		}
 
-		public override void Serialize(NetworkWriter writer)
-		{
-			writer.WriteString(SoundName);
-			writer.WriteVector3(Position);
-			writer.WriteBoolean(Polyphonic);
-			writer.WriteUInt32(TargetNetId);
-			writer.WriteString(JsonConvert.SerializeObject(ShakeParameters));
-			writer.WriteString(JsonConvert.SerializeObject(AudioSourceParameters));
-		}
-
-		public override void Deserialize(NetworkReader reader)
-		{
-			SoundName = reader.ReadString();
-			Position = reader.ReadVector3();
-			Polyphonic = reader.ReadBoolean();
-			TargetNetId = reader.ReadUInt32();
-			ShakeParameters = JsonConvert.DeserializeObject<ShakeParameters>(reader.ReadString());
-			AudioSourceParameters = JsonConvert.DeserializeObject<AudioSourceParameters>(reader.ReadString());
-		}
+		// public override void Serialize(NetworkWriter writer)
+		// {
+		// 	writer.WriteString(SoundName);
+		// 	writer.WriteVector3(Position);
+		// 	writer.WriteBoolean(Polyphonic);
+		// 	writer.WriteUInt32(TargetNetId);
+		// 	writer.WriteString(JsonConvert.SerializeObject(ShakeParameters));
+		// 	writer.WriteString(JsonConvert.SerializeObject(AudioSourceParameters));
+		// }
+		//
+		// public override void Deserialize(NetworkReader reader)
+		// {
+		// 	SoundName = reader.ReadString();
+		// 	Position = reader.ReadVector3();
+		// 	Polyphonic = reader.ReadBoolean();
+		// 	TargetNetId = reader.ReadUInt32();
+		// 	ShakeParameters = JsonConvert.DeserializeObject<ShakeParameters>(reader.ReadString());
+		// 	AudioSourceParameters = JsonConvert.DeserializeObject<AudioSourceParameters>(reader.ReadString());
+		// }
 	}
 }

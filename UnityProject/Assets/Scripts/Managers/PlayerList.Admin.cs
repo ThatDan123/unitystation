@@ -899,7 +899,6 @@ public partial class PlayerList
 		yield return WaitFor.Seconds(1f);
 
 		connPlayer.Connection.Disconnect();
-		connPlayer.Connection.Dispose();
 
 		while (!loggedOff.Contains(connPlayer))
 		{

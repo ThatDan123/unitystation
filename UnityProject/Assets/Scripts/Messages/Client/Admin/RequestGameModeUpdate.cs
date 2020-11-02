@@ -55,21 +55,21 @@ public class RequestGameModeUpdate : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Userid = reader.ReadString();
-		AdminToken = reader.ReadString();
-		NextGameMode = reader.ReadString();
-		IsSecret = reader.ReadBoolean();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteString(Userid);
-		writer.WriteString(AdminToken);
-		writer.WriteString(NextGameMode);
-		writer.WriteBoolean(IsSecret);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Userid = reader.ReadString();
+	// 	AdminToken = reader.ReadString();
+	// 	NextGameMode = reader.ReadString();
+	// 	IsSecret = reader.ReadBoolean();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteString(Userid);
+	// 	writer.WriteString(AdminToken);
+	// 	writer.WriteString(NextGameMode);
+	// 	writer.WriteBoolean(IsSecret);
+	// }
 }

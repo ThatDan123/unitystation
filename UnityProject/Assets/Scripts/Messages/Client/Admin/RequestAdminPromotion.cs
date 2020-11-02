@@ -40,19 +40,19 @@ public class RequestAdminPromotion : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Userid = reader.ReadString();
-		AdminToken = reader.ReadString();
-		UserToPromote = reader.ReadString();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteString(Userid);
-		writer.WriteString(AdminToken);
-		writer.WriteString(UserToPromote);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Userid = reader.ReadString();
+	// 	AdminToken = reader.ReadString();
+	// 	UserToPromote = reader.ReadString();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteString(Userid);
+	// 	writer.WriteString(AdminToken);
+	// 	writer.WriteString(UserToPromote);
+	// }
 }

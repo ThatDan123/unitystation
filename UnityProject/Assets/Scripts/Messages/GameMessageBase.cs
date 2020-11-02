@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using Mirror;
 
-public abstract class GameMessageBase : MessageBase
+public abstract class GameMessageBase : NetworkMessage
 {
 	public GameObject NetworkObject;
 	public GameObject[] NetworkObjects;

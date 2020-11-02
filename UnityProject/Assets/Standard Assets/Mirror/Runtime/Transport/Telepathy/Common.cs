@@ -3,6 +3,8 @@ using System;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 using System.Threading;
+using System.Collections.Generic;
+using System.Net;
 
 namespace Telepathy
 {
@@ -115,7 +117,7 @@ namespace Telepathy
         }
 
         // read message (via stream) with the <size,content> message structure
-        protected static bool ReadMessageBlocking(NetworkStream stream, int MaxMessageSize, out byte[] content)
+        protected static bool ReadMessageBlocking(NetworkStream stream, int MaxMessageSize, out byte[] content, TcpClient client)
         {
             content = null;
 
@@ -140,8 +142,18 @@ namespace Telepathy
                 return stream.ReadExactly(content, size);
             }
             Logger.LogWarning("ReadMessageBlocking: possible allocation attack with a header of: " + size + " bytes.");
+
+            //THIS IS CUSTOM USTATION CODE (bring it with you if updating telepathy):
+            Logger.LogWarning("ReadMessageBlocking: possible allocation attack with a header of: " + size + " bytes.");
+            Logger.LogWarning($"Content: {content}");
+            Logger.LogWarning($"IP: {client.Client.RemoteEndPoint.ToString()}");
+            allocationAttackQueue.Enqueue(IPAddress.Parse(client.Client.RemoteEndPoint.ToString()).MapToIPv4().ToString());
+
             return false;
         }
+
+        //THIS IS CUSTOM USTATION CODE (bring it with you if updating telepathy):
+        public static Queue<string> allocationAttackQueue = new Queue<string>();
 
         // thread receive function is the same for client and server's clients
         // (static to reduce state for maximum reliability)
@@ -181,7 +193,7 @@ namespace Telepathy
                 {
                     // read the next message (blocking) or stop if stream closed
                     byte[] content;
-                    if (!ReadMessageBlocking(stream, MaxMessageSize, out content))
+                    if (!ReadMessageBlocking(stream, MaxMessageSize, out content, client))
                         // break instead of return so stream close still happens!
                         break;
 

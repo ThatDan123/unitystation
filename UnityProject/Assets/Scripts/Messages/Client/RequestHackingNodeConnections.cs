@@ -48,17 +48,17 @@ public class RequestHackingNodeConnections : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Player = reader.ReadUInt32();
-		HackableObject = reader.ReadUInt32();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt32(Player);
-		writer.WriteUInt32(HackableObject);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Player = reader.ReadUInt32();
+	// 	HackableObject = reader.ReadUInt32();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt32(Player);
+	// 	writer.WriteUInt32(HackableObject);
+	// }
 }

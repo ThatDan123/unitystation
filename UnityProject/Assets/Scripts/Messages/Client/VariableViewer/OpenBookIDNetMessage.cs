@@ -33,19 +33,19 @@ public class OpenBookIDNetMessage : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		BookID = reader.ReadUInt64();
-		AdminId = reader.ReadString();
-		AdminToken = reader.ReadString();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt64(BookID);
-		writer.WriteString(AdminId);
-		writer.WriteString(AdminToken);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	BookID = reader.ReadUInt64();
+	// 	AdminId = reader.ReadString();
+	// 	AdminToken = reader.ReadString();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt64(BookID);
+	// 	writer.WriteString(AdminId);
+	// 	writer.WriteString(AdminToken);
+	// }
 }

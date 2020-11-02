@@ -32,17 +32,17 @@ public class PostToChatMessage : ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Channels = (ChatChannel) reader.ReadUInt32();
-		ChatMessageText = reader.ReadString();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteInt32((int) Channels);
-		writer.WriteString(ChatMessageText);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Channels = (ChatChannel) reader.ReadUInt32();
+	// 	ChatMessageText = reader.ReadString();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteInt32((int) Channels);
+	// 	writer.WriteString(ChatMessageText);
+	// }
 }

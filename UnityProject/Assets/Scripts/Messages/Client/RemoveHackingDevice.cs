@@ -40,19 +40,19 @@ public class RemoveHackingDevice: ClientMessage
 		return msg;
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Player = reader.ReadUInt32();
-		HackableObject = reader.ReadUInt32();
-		HackingDevice = reader.ReadUInt32();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt32(Player);
-		writer.WriteUInt32(HackableObject);
-		writer.WriteUInt32(HackingDevice);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Player = reader.ReadUInt32();
+	// 	HackableObject = reader.ReadUInt32();
+	// 	HackingDevice = reader.ReadUInt32();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt32(Player);
+	// 	writer.WriteUInt32(HackableObject);
+	// 	writer.WriteUInt32(HackingDevice);
+	// }
 }

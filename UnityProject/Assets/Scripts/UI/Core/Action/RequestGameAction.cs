@@ -86,19 +86,19 @@ public class RequestGameAction : ClientMessage
 		Logger.LogError("Failed to find IServerActionGUI on NetworkIdentity");
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		ComponentType = componentIDToComponentType[reader.ReadUInt16()];
-		NetObject = reader.ReadUInt32();
-		ComponentLocation = reader.ReadInt32();
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteUInt16(componentTypeToComponentID[ComponentType]);
-		writer.WriteUInt32(NetObject);
-		writer.WriteInt32(ComponentLocation);
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	ComponentType = componentIDToComponentType[reader.ReadUInt16()];
+	// 	NetObject = reader.ReadUInt32();
+	// 	ComponentLocation = reader.ReadInt32();
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteUInt16(componentTypeToComponentID[ComponentType]);
+	// 	writer.WriteUInt32(NetObject);
+	// 	writer.WriteInt32(ComponentLocation);
+	// }
 }

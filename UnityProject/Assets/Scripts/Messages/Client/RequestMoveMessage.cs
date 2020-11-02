@@ -30,23 +30,23 @@ public class RequestMoveMessage : ClientMessage
 		return $"[RequestMoveMessage Action={Action} SentBy={SentByPlayer}]";
 	}
 
-	public override void Deserialize(NetworkReader reader)
-	{
-		base.Deserialize(reader);
-		Action.moveActions = new int[reader.ReadInt32()];
-		for ( var i = 0; i < Action.moveActions.Length; i++ )
-		{
-			Action.moveActions[i] = reader.ReadInt32();
-		}
-	}
-
-	public override void Serialize(NetworkWriter writer)
-	{
-		base.Serialize(writer);
-		writer.WriteInt32(Action.moveActions.Length);
-		for ( var i = 0; i < Action.moveActions.Length; i++ )
-		{
-			writer.WriteInt32(Action.moveActions[i]);
-		}
-	}
+	// public override void Deserialize(NetworkReader reader)
+	// {
+	// 	base.Deserialize(reader);
+	// 	Action.moveActions = new int[reader.ReadInt32()];
+	// 	for ( var i = 0; i < Action.moveActions.Length; i++ )
+	// 	{
+	// 		Action.moveActions[i] = reader.ReadInt32();
+	// 	}
+	// }
+	//
+	// public override void Serialize(NetworkWriter writer)
+	// {
+	// 	base.Serialize(writer);
+	// 	writer.WriteInt32(Action.moveActions.Length);
+	// 	for ( var i = 0; i < Action.moveActions.Length; i++ )
+	// 	{
+	// 		writer.WriteInt32(Action.moveActions[i]);
+	// 	}
+	// }
 }
