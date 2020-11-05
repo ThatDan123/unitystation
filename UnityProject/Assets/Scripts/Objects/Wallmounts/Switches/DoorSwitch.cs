@@ -145,6 +145,9 @@ namespace Objects.Wallmounts
 
 			foreach (DoorController door in doorControllers)
 			{
+				// Door doesn't exist anymore - shuttle crash, admin smash, etc.
+				if (door == null) continue;
+
 				if (door.IsClosed)
 				{
 					if (door.IsHackable)

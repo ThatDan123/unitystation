@@ -1201,8 +1201,6 @@ namespace Blob
 
 			GameManager.Instance.PrimaryEscapeShuttle.SetHostileEnvironment(false);
 
-			GameManager.Instance.CentComm.ChangeAlertLevel(CentComm.AlertLevel.Blue);
-
 			Chat.AddSystemMsgToChat(
 				string.Format(CentComm.BioHazardReportTemplate,
 					"The biohazard has been contained."),
@@ -1444,6 +1442,8 @@ namespace Blob
 
 				if (!result.Successful) continue;
 
+				result.GameObject.GetComponent<BlobStructure>().overmindName = overmindName;
+
 				factoryBlob.Value.Add(result.GameObject);
 			}
 		}
@@ -1580,6 +1580,9 @@ namespace Blob
 		{
 			if (blobStructure.integrity == null) return;
 
+			blobStructure.integrity.Armor = blobStructure.initialArmor;
+			blobStructure.integrity.Resistances = blobStructure.initialResistances;
+
 			if (currentStrain.customArmor)
 			{
 				blobStructure.integrity.Armor = currentStrain.armor;
@@ -1651,6 +1654,8 @@ namespace Blob
 
 		private void SubscribeToDamage(BlobStructure structure)
 		{
+			if(!CustomNetworkManager.IsServer) return;
+
 			structure.integrity.OnWillDestroyServer.AddListener(BlobTileDeath);
 
 			structure.integrity.OnApplyDamage.AddListener(OnDamageReceived);
@@ -1712,7 +1717,7 @@ namespace Blob
 
 		private void ExpandWhenBurnt(DamageInfo info)
 		{
-			if(info.DamageType != DamageType.Burn || info.AttackType != AttackType.Fire) return;
+			if(info.DamageType != DamageType.Burn && info.AttackType != AttackType.Fire) return;
 
 			var pos = info.AttackedIntegrity.gameObject.WorldPosServer().RoundToInt();
 
@@ -1739,6 +1744,8 @@ namespace Blob
 				var posCache = pos + offset;
 
 				first.SetPosition(second.ServerPosition);
+				blobTiles[second.ServerPosition] = first.GetComponent<BlobStructure>();
+				blobTiles[posCache] = blobStructure;
 				second.SetPosition(posCache);
 
 				//If moved to node or core refresh areas
@@ -1781,7 +1788,7 @@ namespace Blob
 			}
 
 			//Heal self back up
-			info.AttackedIntegrity.RestoreIntegrity(damage * blobIntegrities.Count - 1);
+			info.AttackedIntegrity.RestoreIntegrity(damage * (blobIntegrities.Count - 1));
 		}
 
 		private void EmitFlame(DamageInfo info)

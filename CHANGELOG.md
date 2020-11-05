@@ -2,6 +2,22 @@
 ---
 
 
+* 2020/11/5: Added new sprites for the ore redemption machine and mining vendor by Ghommie. by [PetMudstone](https://github.com/PetMudstone) in PR #[5505](https://github.com/unitystation/unitystation/pull/5505)
+* 2020/11/5: Added new sprites for pens by TetraZeta. by [PetMudstone](https://github.com/PetMudstone) in PR #[5500](https://github.com/unitystation/unitystation/pull/5500)
+* 2020/11/4: Added a couple more transformations for the null rod. by [PetMudstone](https://github.com/PetMudstone) in PR #[5493](https://github.com/unitystation/unitystation/pull/5493)
+* 2020/11/3: fix pkas by [the-other-autumn](https://github.com/the-other-autumn) in PR #[5418](https://github.com/unitystation/unitystation/pull/5418)
+* 2020/11/3: adds id locks for weapons by [the-other-autumn](https://github.com/the-other-autumn) in PR #[5418](https://github.com/unitystation/unitystation/pull/5418)
+* 2020/11/3: adds clown clumsy behaviour with guns by [the-other-autumn](https://github.com/the-other-autumn) in PR #[5418](https://github.com/unitystation/unitystation/pull/5418)
+* 2020/11/3: adjusted high pop and medium pop maps by [Bod9001](https://github.com/Bod9001) in PR #[5482](https://github.com/unitystation/unitystation/pull/5482)
+* 2020/11/3: made nuclear operatives more likely by [Bod9001](https://github.com/Bod9001) in PR #[5482](https://github.com/unitystation/unitystation/pull/5482)
+* 2020/11/1: Drinking glass icon fixes by [Macoron](https://github.com/Macoron) in PR #[5456](https://github.com/unitystation/unitystation/pull/5456)
+* 2020/10/31: Fixes up directional signs so that the evac and cargo signs are now place-able prefabs. Adjusts sign placement on FallStation, Square, Outpost, adds directional signs to Box. Also connects HoP line's front shutters on FallStation to the door button. by [Akbadain29](https://github.com/Akbadain29) in PR #[5441](https://github.com/unitystation/unitystation/pull/5441)
+* 2020/10/29: Adds Wizard Asteroid Spawn Scene. by [Akbadain29](https://github.com/Akbadain29) in PR #[5432](https://github.com/unitystation/unitystation/pull/5432)
+* 2020/10/28: Fixed when dead blob would error on spawn, blob will no longer spawn if host is dead by [ThatDan123](https://github.com/ThatDan123) in PR #[5431](https://github.com/unitystation/unitystation/pull/5431)
+* 2020/10/28: Fixed being able to attack own spores by [ThatDan123](https://github.com/ThatDan123) in PR #[5431](https://github.com/unitystation/unitystation/pull/5431)
+* 2020/10/28: Fixed blob strain switching not defaulting to original resistances and armor by [ThatDan123](https://github.com/ThatDan123) in PR #[5429](https://github.com/unitystation/unitystation/pull/5429)
+* 2020/10/27: Fixed minor issues with blob by [ThatDan123](https://github.com/ThatDan123) in PR #[5428](https://github.com/unitystation/unitystation/pull/5428)
+* 2020/10/27: Added forcewall spell, spell books, random initial spells, wizard garb functionality. by [NoooneyDude](https://github.com/NoooneyDude) in PR #[5426](https://github.com/unitystation/unitystation/pull/5426)
 * 2020/10/27: fix: access restrictions for brig timers by [JustinTrotter](https://github.com/JustinTrotter) in PR #[5423](https://github.com/unitystation/unitystation/pull/5423)
 * 2020/10/26: search added to admin player manager by [JustinTrotter](https://github.com/JustinTrotter) in PR #[5422](https://github.com/unitystation/unitystation/pull/5422)
 * 2020/10/26: Admins now can see disconnected players and banned them by [Bod9001](https://github.com/Bod9001) in PR #[5416](https://github.com/unitystation/unitystation/pull/5416)
