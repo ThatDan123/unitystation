@@ -16,13 +16,17 @@ public class GunElectrical : Gun, ICheckedInteractable<HandActivate>
 	[SyncVar(hook = nameof(UpdateFiremode))]
 	private int currentFiremode = 0;
 
-	public int CurrentFiremode => currentFiremode;
-
 	public Battery battery =>
 			magSlot.Item != null ? magSlot.Item.GetComponent<Battery>() : null;
 
-	public ElectricalMagazine currentelmag =>
+	public ElectricalMagazine currentElectricalMag =>
 			magSlot.Item != null ? magSlot.Item.GetComponent<ElectricalMagazine>() : null;
+
+	public override void OnSpawnServer(SpawnInfo info)
+	{
+		UpdateFiremode(currentFiremode, 0);
+		base.OnSpawnServer(info);
+	}
 
 	public bool WillInteract(HandActivate interaction, NetworkSide side)
 	{
@@ -31,13 +35,13 @@ public class GunElectrical : Gun, ICheckedInteractable<HandActivate>
 
 	public override bool WillInteract(AimApply interaction, NetworkSide side)
 	{
-		if (firemodeUsage[currentFiremode] > battery.Watts) 
+		if (firemodeUsage[currentFiremode] > battery.Watts)
 		{
-			base.PlayEmptySFX();
+			PlayEmptySFX();
 			return false;
 		}
 		CurrentMagazine.containedBullets[0] = firemodeProjectiles[currentFiremode];
-		currentelmag.toRemove = firemodeUsage[currentFiremode];
+		currentElectricalMag.toRemove = firemodeUsage[currentFiremode];
 		return base.WillInteract(interaction, side);
 	}
 
@@ -46,18 +50,22 @@ public class GunElectrical : Gun, ICheckedInteractable<HandActivate>
 		if (firemodeProjectiles.Count <= 1)
 			return;
 		if (currentFiremode == firemodeProjectiles.Count - 1)
-			currentFiremode = 0;
+		{
+			UpdateFiremode(currentFiremode, 0);
+		}
 		else
 		{
-			currentFiremode++;
+			UpdateFiremode(currentFiremode, currentFiremode + 1);
 		}
-		Chat.AddExamineMsgToClient($"You switch your {gameObject.ExpensiveName()} into {firemodeName[currentFiremode]} mode");
+		Chat.AddExamineMsgFromServer(interaction.Performer, $"You switch your {gameObject.ExpensiveName()} into {firemodeName[currentFiremode]} mode");
+		CurrentMagazine.ServerSetAmmoRemains(battery.Watts / firemodeUsage[currentFiremode]);
 	}
 
 	public override void ServerPerformInteraction(AimApply interaction)
 	{
 		if (firemodeUsage[currentFiremode] > battery.Watts) return;
-		base.ServerPerformInteraction(interaction);		
+		base.ServerPerformInteraction(interaction);
+		CurrentMagazine.ServerSetAmmoRemains(battery.Watts / firemodeUsage[currentFiremode]);
 	}
 
 	public void UpdateFiremode(int oldValue, int newState)

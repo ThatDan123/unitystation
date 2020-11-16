@@ -22,6 +22,7 @@ public class GunPKA : Gun
 		CurrentMagazine.containedBullets[0] = Projectile;
 		return base.WillInteract(interaction, side);
 	}
+
 	public override void ServerPerformInteraction(AimApply interaction)
 	{
 		if (allowRecharge)
@@ -37,7 +38,17 @@ public class GunPKA : Gun
 		yield return WaitFor.Seconds(rechargeTime);
 		CurrentMagazine.ServerSetAmmoRemains(1);
 		CurrentMagazine.LoadProjectile(Projectile, 1);
-		SoundManager.PlayNetworkedAtPos("ReloadKinetic", gameObject.AssumedWorldPosServer(), sourceObj: serverHolder);
+		if (isSuppressed)
+		{
+			if (serverHolder != null)
+			{
+				Chat.AddExamineMsgFromServer(serverHolder, $"The {gameObject.ExpensiveName()} silently recharges");
+			}
+		}
+		else
+		{
+			SoundManager.PlayNetworkedAtPos("ReloadKinetic", gameObject.AssumedWorldPosServer(), sourceObj: serverHolder);
+		}
 		allowRecharge = true;
 	}
 }

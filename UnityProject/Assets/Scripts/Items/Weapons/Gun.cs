@@ -164,6 +164,7 @@ namespace Weapons
 
 		private GunTrigger gunTrigger;
 
+		public bool isSuppressed;
 
 		#region Init Logic
 
@@ -240,10 +241,13 @@ namespace Weapons
 		public virtual bool WillInteract(AimApply interaction, NetworkSide side)
 		{
 			if (!DefaultWillInteract.Default(interaction, side)) return false;
+
+
+
 			if (CurrentMagazine == null)
 			{
 				PlayEmptySFX();
-				if (interaction.Performer != PlayerManager.LocalPlayer)
+				if (side == NetworkSide.Server)
 				{
 					Logger.LogTrace("Server rejected shot - No magazine being loaded", Category.Firearms);
 				}
@@ -254,56 +258,59 @@ namespace Weapons
 			//anyway so client cannot exceed that firing rate no matter what. If we validate firing rate server
 			//side at the moment of interaction, it will reject client's shots because of lag between server / client
 			//firing countdown
-			if (CurrentMagazine.ClientAmmoRemains <= 0 && (interaction.Performer != PlayerManager.LocalPlayer || FireCountDown <= 0))
+			if (side == NetworkSide.Server || FireCountDown <= 0)
 			{
-				if (SmartGun && allowMagazineRemoval) // smartGun is forced off when using an internal magazine
+				if (CurrentMagazine.ClientAmmoRemains <= 0)
 				{
-					RequestUnload(CurrentMagazine);
-					OutOfAmmoSFX();
-				}
-				else
-				{
-					PlayEmptySFX();
-				}
-				if (interaction.Performer != PlayerManager.LocalPlayer)
-				{
-					Logger.LogTrace("Server rejected shot - out of ammo", Category.Firearms);
-				}
-				return false;
-			}
-
-			if (CurrentMagazine.containedBullets[0] != null && CurrentMagazine.ClientAmmoRemains > 0 && (interaction.Performer != PlayerManager.LocalPlayer || FireCountDown <= 0))
-			{
-				if (WeaponType == WeaponType.Burst)
-				{
-					//being held and is a burst weapon, check how many shots have been fired our the current burst
-					if (currentBurstCount < burstCount)
+					if (SmartGun && allowMagazineRemoval) // smartGun is forced off when using an internal magazine
 					{
-						//we have shot less then the max allowed shots in our current burst, increase and fire again
-						currentBurstCount++;
+						RequestUnload(CurrentMagazine);
+						OutOfAmmoSFX();
+					}
+					else
+					{
+						PlayEmptySFX();
+					}
+					if (side == NetworkSide.Server)
+					{
+						Logger.LogTrace("Server rejected shot - out of ammo", Category.Firearms);
+					}
+					return false;
+				}
+
+				if (CurrentMagazine.containedBullets[0] != null)
+				{
+					if (WeaponType == WeaponType.Burst)
+					{
+						//being held and is a burst weapon, check how many shots have been fired our the current burst
+						if (currentBurstCount < burstCount)
+						{
+							//we have shot less then the max allowed shots in our current burst, increase and fire again
+							currentBurstCount++;
+							return true;
+						}
+						else if (currentBurstCount >= burstCount)
+						{
+							//we have shot the max allowed shots in our current burst, start cooldown and then fire the first shot
+							WaitFor.Seconds((float)burstCooldown);
+							currentBurstCount = 1;
+							return true;
+						}
+					}
+					else if (interaction.MouseButtonState == MouseButtonState.PRESS)
+					{
+						currentBurstCount = 0;
 						return true;
 					}
-					else if (currentBurstCount >= burstCount)
+					else
 					{
-						//we have shot the max allowed shots in our current burst, start cooldown and then fire the first shot
-						WaitFor.Seconds((float)burstCooldown);
-						currentBurstCount = 1;
-						return true;
+						//being held, only can shoot if this is an automatic
+						return WeaponType == WeaponType.FullyAutomatic;
 					}
-				}
-				else if (interaction.MouseButtonState == MouseButtonState.PRESS)
-				{
-					currentBurstCount = 0;
-					return true;
-				}
-				else
-				{
-					//being held, only can shoot if this is an automatic
-					return WeaponType == WeaponType.FullyAutomatic;
 				}
 			}
 
-			if (interaction.Performer != PlayerManager.LocalPlayer)
+			if (side == NetworkSide.Server)
 			{
 				Logger.LogTraceFormat("Server rejected shot - unknown reason. MouseButtonState {0} ammo remains {1} weapon type {2}", Category.Firearms,
 					interaction.MouseButtonState, CurrentMagazine.ClientAmmoRemains, WeaponType);
@@ -311,7 +318,7 @@ namespace Weapons
 			return false;
 		}
 
-		public void ClientPredictInteraction(AimApply interaction)
+		public virtual void ClientPredictInteraction(AimApply interaction)
 		{
 			//do we need to check if this is a suicide (want to avoid the check because it involves a raycast).
 			//case 1 - we are beginning a new shot, need to see if we are shooting ourselves
@@ -576,6 +583,15 @@ namespace Weapons
 
 				//tell all the clients to display the shot
 				ShootMessage.SendToAll(nextShot.finalDirection, nextShot.damageZone, nextShot.shooter, this.gameObject, nextShot.isSuicide, toShoot.name, quantity);
+
+				if (isSuppressed == false && nextShot.isSuicide == false)
+				{
+					Chat.AddActionMsgToChat(
+					serverHolder,
+					$"You fire your {gameObject.ExpensiveName()}",
+					$"{serverHolder.ExpensiveName()} fires their {gameObject.ExpensiveName()}");
+				}
+
 
 				//kickback
 				shooterScript.pushPull.Pushable.NewtonianMove((-nextShot.finalDirection).NormalizeToInt());

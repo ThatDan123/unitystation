@@ -200,8 +200,7 @@ namespace Objects
 			vendorItem.Stock--;
 
 			// State sucsess message to chat
-			var itemNameStr = TextUtils.UppercaseFirst(spawnedItem.ExpensiveName());
-			Chat.AddLocalMsgToChat($"{itemNameStr} was dispensed from the vending machine", gameObject);
+			Chat.AddLocalMsgToChat($"The {spawnedItem.ExpensiveName()} was dispensed from the vending machine", gameObject);
 
 			// Play vending sound
 			SoundManager.PlayNetworkedAtPos(VendingSound, gameObject.WorldPosServer(), Random.Range(.75f, 1.1f), sourceObj: gameObject);

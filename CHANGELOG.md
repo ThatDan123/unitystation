@@ -2,6 +2,13 @@
 ---
 
 
+* 2020/11/15: Renamed "Cutthroat" pistol to Makarov, since that's what it resembles now. by [PetMudstone](https://github.com/PetMudstone) in PR #[5615](https://github.com/unitystation/unitystation/pull/5615)
+* 2020/11/15: Added new Stechkin sprites by schwick. by [PetMudstone](https://github.com/PetMudstone) in PR #[5615](https://github.com/unitystation/unitystation/pull/5615)
+* 2020/11/13: Added instant Summons spell and book. by [NoooneyDude](https://github.com/NoooneyDude) in PR #[5610](https://github.com/unitystation/unitystation/pull/5610)
+* 2020/11/13: Adds basic maint areas to SquareStation, racks and items still need to be added. by [Akbadain29](https://github.com/Akbadain29) in PR #[5608](https://github.com/unitystation/unitystation/pull/5608)
+* 2020/11/9: Can use objects on walls and windows from an extra tile away by [Ruzihm](https://github.com/Ruzihm) in PR #[5570](https://github.com/unitystation/unitystation/pull/5570)
+* 2020/11/8: Added lightning bolt spell and the magic mirror. by [NoooneyDude](https://github.com/NoooneyDude) in PR #[5561](https://github.com/unitystation/unitystation/pull/5561)
+* 2020/11/6: Added antags sounds for round start by [Macoron](https://github.com/Macoron) in PR #[5524](https://github.com/unitystation/unitystation/pull/5524)
 * 2020/11/5: Added new sprites for the ore redemption machine and mining vendor by Ghommie. by [PetMudstone](https://github.com/PetMudstone) in PR #[5505](https://github.com/unitystation/unitystation/pull/5505)
 * 2020/11/5: Added new sprites for pens by TetraZeta. by [PetMudstone](https://github.com/PetMudstone) in PR #[5500](https://github.com/unitystation/unitystation/pull/5500)
 * 2020/11/4: Added a couple more transformations for the null rod. by [PetMudstone](https://github.com/PetMudstone) in PR #[5493](https://github.com/unitystation/unitystation/pull/5493)

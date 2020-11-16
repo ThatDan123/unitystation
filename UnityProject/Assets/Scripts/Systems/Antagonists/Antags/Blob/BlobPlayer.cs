@@ -231,8 +231,7 @@ namespace Blob
 
 			overmindName = $"Overmind {Random.Range(1, 1001)}";
 
-			playerScript.characterSettings.Name = overmindName;
-			playerScript.playerName = overmindName;
+			playerScript.SetPermanentName(overmindName);
 
 			var result = Spawn.ServerPrefab(blobCorePrefab, playerSync.ServerPosition, gameObject.transform);
 
@@ -747,7 +746,7 @@ namespace Blob
 
 					if (!autoExpanding)
 					{
-						Chat.AddLocalMsgToChat($"The blob attacks the {hit.gameObject.ExpensiveName()}", worldPos, gameObject);
+						Chat.AddLocalMsgToChat($"The blob attacks the {hit.gameObject.ExpensiveName()}", gameObject);
 					}
 
 					PlayAttackEffect(pos);
@@ -767,7 +766,7 @@ namespace Blob
 			}
 
 			//Check for walls, windows and grills
-			if (metaTileMap != null && !MatrixManager.IsPassableAt(pos, true))
+			if (metaTileMap != null && !MatrixManager.IsPassableAtAllMatricesOneTile(pos, true))
 			{
 				//Cell pos is unused var
 				metaTileMap.ApplyDamage(Vector3Int.zero, layerDamage, pos);

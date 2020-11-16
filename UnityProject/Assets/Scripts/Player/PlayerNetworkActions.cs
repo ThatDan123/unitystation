@@ -190,7 +190,7 @@ public partial class PlayerNetworkActions : NetworkBehaviour
 	[Command]
 	public void CmdSlideItem(Vector3Int destination)
 	{
-		if (playerScript.IsInReach(destination, true) == false
+		if (playerScript.IsPositionReachable(destination, true) == false
 			|| playerScript.pushPull.PulledObjectServer == null
 			|| playerScript.IsGhost
 			|| playerScript.playerHealth.ConsciousState != ConsciousState.CONSCIOUS)
@@ -220,6 +220,16 @@ public partial class PlayerNetworkActions : NetworkBehaviour
 		Inventory.ServerDrop(slot);
 	}
 
+	/// <summary>
+	/// Server handling of the request to drop an item from a client (any slot)
+	/// </summary>
+	[Command]
+	public void CmdDropItemWithoutValidations(NamedSlot equipSlot)
+	{
+		var slot = itemStorage.GetNamedItemSlot(equipSlot);
+		Inventory.ServerDrop(slot);
+	}
+
 
 	/// <summary>
 	/// Request to drop alls item from ItemStorage, send an item slot net id of
@@ -245,9 +255,9 @@ public partial class PlayerNetworkActions : NetworkBehaviour
 		Vector2? possibleTarget = null;
 		if (Target != TransformState.HiddenPos)
 		{
-			if (Validations.IsInReach(PlayerManager.PlayerScript.registerTile.WorldPosition, Target, false))
+			if (Validations.IsReachableByPositions(PlayerManager.PlayerScript.registerTile.WorldPosition, Target, false))
 			{
-				if (MatrixManager.IsPassableAt(Target.RoundToInt(), CustomNetworkManager.Instance._isServer))
+				if (MatrixManager.IsPassableAtAllMatricesOneTile(Target.RoundToInt(), CustomNetworkManager.Instance._isServer))
 				{
 					possibleTarget = (Target - PlayerManager.PlayerScript.registerTile.WorldPosition);
 				}
@@ -647,7 +657,7 @@ public partial class PlayerNetworkActions : NetworkBehaviour
 	{
 		if (playerScript.IsGhost || playerScript.playerHealth.ConsciousState != ConsciousState.CONSCIOUS)
 			return;
-		string pointedName = pointTarget.name;
+		string pointedName = pointTarget.ExpensiveName();
 		var interactableTiles = pointTarget.GetComponent<InteractableTiles>();
 		if (interactableTiles)
 		{
@@ -657,10 +667,14 @@ public partial class PlayerNetworkActions : NetworkBehaviour
 				pointedName = tile.DisplayName;
 			}
 		}
+		var livinghealthbehavior = pointTarget.GetComponent<LivingHealthBehaviour>();
+		var preposition = "";
+		if (livinghealthbehavior == null)
+			preposition = "the ";
 
 		Effect.PlayParticleDirectional(gameObject, mousePos);
-		Chat.AddActionMsgToChat(playerScript.gameObject, $"You point at {pointedName}.",
-			$"{playerScript.gameObject.name} points at {pointTarget.name}.");
+		Chat.AddActionMsgToChat(playerScript.gameObject, $"You point at {preposition}{pointedName}.",
+			$"{playerScript.gameObject.ExpensiveName()} points at {preposition}{pointedName}.");
 	}
 
 	[Command]
