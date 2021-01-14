@@ -11,8 +11,8 @@ using UnityEngine.EventSystems;
 		public GameObject hideOnRetract;
 		private bool isOpen;
 
-		[SerializeField] private GameObject openButtonImage;
-		[SerializeField] private GameObject closeButtonImage;
+		[SerializeField] private GameObject openButtonImage = default;
+		[SerializeField] private GameObject closeButtonImage = default;
 		/// <summary>
 		/// Whether the expandable clothing menu is open
 		/// </summary>
@@ -32,7 +32,7 @@ using UnityEngine.EventSystems;
 
 		public void RolloutEquipmentMenu()
 		{
-			SoundManager.Play("Click01");
+			SoundManager.Play(SingletonSOSounds.Instance.Click01);
 
 			if (isOpen)
 			{

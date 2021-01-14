@@ -14,6 +14,13 @@ namespace Objects
 		private OccupiableDirectionalSprite occupiableDirectionalSprite;
 		private Integrity integrity;
 
+		/// <summary>
+		/// The time that a mob will spend trying to unbuckle himself from a chair when he is handcuffed.
+		/// </summary>
+		[SerializeField]
+		private float resistTime = 60;
+		public float ResistTime => resistTime;
+
 		public bool forceLayingDown;
 
 		private void Start()
@@ -102,7 +109,7 @@ namespace Objects
 		/// </summary>
 		public void BucklePlayer(PlayerScript playerScript)
 		{
-			SoundManager.PlayNetworkedAtPos("Click01", gameObject.WorldPosServer(), sourceObj: gameObject);
+			SoundManager.PlayNetworkedAtPos(SingletonSOSounds.Instance.Click01, gameObject.WorldPosServer(), sourceObj: gameObject);
 
 			playerScript.playerMove.ServerBuckle(gameObject, OnUnbuckle);
 
@@ -125,7 +132,7 @@ namespace Objects
 
 		public void ServerPerformInteraction(HandApply interaction)
 		{
-			SoundManager.PlayNetworkedAtPos("Click01", interaction.TargetObject.WorldPosServer(), sourceObj: gameObject);
+			SoundManager.PlayNetworkedAtPos(SingletonSOSounds.Instance.Click01, interaction.TargetObject.WorldPosServer(), sourceObj: gameObject);
 
 			Unbuckle();
 		}

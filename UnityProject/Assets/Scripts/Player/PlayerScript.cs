@@ -21,9 +21,9 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 	/// </summary>
 	public CharacterSettings characterSettings = new CharacterSettings();
 
-	[SyncVar(hook = nameof(SyncPlayerName))] public string playerName = " ";
+	[HideInInspector, SyncVar(hook = nameof(SyncPlayerName))] public string playerName = " ";
 
-	[SyncVar(hook = nameof(SyncVisibleName))] public string visibleName = " ";
+	[HideInInspector, SyncVar(hook = nameof(SyncVisibleName))] public string visibleName = " ";
 	public PlayerNetworkActions playerNetworkActions { get; set; }
 
 	public WeaponNetworkActions weaponNetworkActions { get; set; }
@@ -103,8 +103,13 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 	{
 		Init();
 		waitTimeForRTTUpdate = 0f;
-		UIManager.Internals.SetupListeners();
-		UIManager.Instance.panelHudBottomController.SetupListeners();
+
+		if (IsGhost == false)
+		{
+			UIManager.Internals.SetupListeners();
+			UIManager.Instance.panelHudBottomController.SetupListeners();
+		}
+		
 		isUpdateRTT = true;
 	}
 
@@ -232,9 +237,9 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 			UIManager.ResetAllUI();
 			GetComponent<MouseInputController>().enabled = true;
 
-			if (!UIManager.Instance.playerListUIControl.window.activeInHierarchy)
+			if (!UIManager.Instance.statsTab.window.activeInHierarchy)
 			{
-				UIManager.Instance.playerListUIControl.window.SetActive(true);
+				UIManager.Instance.statsTab.window.SetActive(true);
 			}
 
 			PlayerManager.SetPlayerForControl(gameObject, PlayerSync);
@@ -448,16 +453,19 @@ public class PlayerScript : ManagedNetworkBehaviour, IMatrixRotation, IAdminInfo
 	//Update visible name.
 	public void RefreshVisibleName()
 	{
-		// TODO: Check inventory for head/mask items that hide face - atm just check you are not wearing a mask.
-		// needs helmet/hideface trait to be added and checked for. This way, we start with a "face name" our characters might know...
-		if (ItemSlot.GetNamed(ItemStorage, NamedSlot.mask).IsEmpty)
+		string newVisibleName;
+
+		if (IsGhost || Equipment.IsIdentityObscured() == false)
 		{
-			SyncVisibleName(playerName, playerName);
+			newVisibleName = playerName; // can see face so real identity is known
 		}
 		else
 		{
-			SyncVisibleName("Unknown", "Unknown");
+			// Returns Unknown if identity could not be found via equipment (ID, PDA)
+			newVisibleName = Equipment.GetPlayerNameByEquipment();
 		}
+
+		SyncVisibleName(newVisibleName, newVisibleName);
 	}
 
 	//Tooltips inspector bar

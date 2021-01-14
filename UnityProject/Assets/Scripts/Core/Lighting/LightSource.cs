@@ -23,7 +23,7 @@ public class LightSource : ObjectTrigger, ICheckedInteractable<HandApply>, IAPCP
 	[Header("Generates itself if this is null:")]
 	public GameObject mLightRendererObject;
 	[SerializeField]
-	public bool isWithoutSwitch = true;
+	private bool isWithoutSwitch = true;
 	public bool IsWithoutSwitch => isWithoutSwitch;
 	private bool switchState = true;
 	private PowerStates powerState;
@@ -46,7 +46,7 @@ public class LightSource : ObjectTrigger, ICheckedInteractable<HandApply>, IAPCP
 
 	private ItemTrait traitRequired;
 	private GameObject itemInMount;
-	private float integrityThreshBar;
+	public float integrityThreshBar { get; private set; }
 
 	[SerializeField]
 	private MultitoolConnectionType conType = MultitoolConnectionType.LightSwitch;
@@ -385,7 +385,7 @@ public class LightSource : ObjectTrigger, ICheckedInteractable<HandApply>, IAPCP
 		{
 
 			ServerChangeLightState(LightMountState.MissingBulb);
-			SoundManager.PlayNetworkedAtPos("GlassStep", pos, sourceObj: gameObject);
+			SoundManager.PlayNetworkedAtPos(SingletonSOSounds.Instance.GlassStep, pos, sourceObj: gameObject);
 		}
 		else
 		{

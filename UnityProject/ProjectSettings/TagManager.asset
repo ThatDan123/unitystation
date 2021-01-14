@@ -63,6 +63,18 @@ TagManager:
   - name: Floors
     uniqueID: 322132419
     locked: 0
+  - name: GasPipeHidden
+    uniqueID: 250373215
+    locked: 0
+  - name: GasScrubber
+    uniqueID: 4262403347
+    locked: 0
+  - name: GasFilter
+    uniqueID: 3902669417
+    locked: 0
+  - name: GasPump
+    uniqueID: 1724189913
+    locked: 0
   - name: Blood
     uniqueID: 853167107
     locked: 0
@@ -114,11 +126,14 @@ TagManager:
   - name: OverPlayers
     uniqueID: 3362631851
     locked: 0
+  - name: Doors Closed
+    uniqueID: 2469278067
+    locked: 0
   - name: WallObject
     uniqueID: 2330186233
     locked: 0
-  - name: Doors Closed
-    uniqueID: 2469278067
+  - name: Fly
+    uniqueID: 2375682625
     locked: 0
   - name: Lighting
     uniqueID: 1085623217

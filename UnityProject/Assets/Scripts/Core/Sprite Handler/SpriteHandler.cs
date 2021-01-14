@@ -22,6 +22,9 @@ public class SpriteHandler : MonoBehaviour
 	[SerializeField] private SpriteDataSO PresentSpriteSet;
 	private SpriteDataSO.Frame PresentFrame = null;
 
+	[Tooltip("If checked, a random sprite SO will be selected during initialization from the catalogue of sprite SOs.")]
+	[SerializeField] private bool randomInitialSprite = false;
+
 	private SpriteRenderer spriteRenderer;
 	private Image image;
 
@@ -144,7 +147,7 @@ public class SpriteHandler : MonoBehaviour
 
 	public void ChangeSprite(int SubCataloguePage, bool Network = true)
 	{
-		if (SubCataloguePage == cataloguePage) return;
+		if (cataloguePage > -1 && SubCataloguePage == cataloguePage) return;
 
 		if (SubCataloguePage >= SubCatalogue.Count)
 		{
@@ -175,6 +178,9 @@ public class SpriteHandler : MonoBehaviour
 		{
 			isPaletteSet = false;
 			PresentSpriteSet = NewspriteDataSO;
+			// TODO: Network, change to network catalogue message
+			// See https://github.com/unitystation/unitystation/pull/5675#pullrequestreview-540239428
+			cataloguePage = SubCatalogue.FindIndex(SO => SO == NewspriteDataSO);
 			PushTexture(Network);
 			if (Network)
 			{
@@ -689,7 +695,11 @@ public class SpriteHandler : MonoBehaviour
 		ImageComponentStatus(false);
 		Initialised = true;
 
-		if (PresentSpriteSet != null)
+		if (randomInitialSprite && CatalogueCount > 0)
+		{
+			ChangeSprite(Random.Range(0, CatalogueCount), NetworkThis);
+		}
+		else if (PresentSpriteSet != null)
 		{
 			if (HasImageComponent() && pushTextureOnStartUp)
 			{
@@ -722,6 +732,8 @@ public class SpriteHandler : MonoBehaviour
 
 		GetImageComponent();
 		OnSpriteChanged?.Invoke(CurrentSprite);
+
+		PushTexture(false); // TODO: animations don't resume when sprite object is disabled and re-enabled, this is a workaround
 	}
 
 	private void OnDisable()

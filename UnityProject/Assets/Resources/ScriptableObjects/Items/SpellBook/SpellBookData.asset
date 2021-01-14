@@ -24,6 +24,7 @@ MonoBehaviour:
       reducing foes' ability to attack.
     entryList:
     - {fileID: 11400000, guid: 6208b5c364e9cd34baf190050eb8fcb6, type: 2}
+    - {fileID: 11400000, guid: 44511df05170f664092854b97d7ba799, type: 2}
     - {fileID: 11400000, guid: 958b94163c62ac943b3adbaa26976ae1, type: 2}
   - name: Mobility
     description: Spells and items geared towards improving your ability to move.
@@ -36,6 +37,7 @@ MonoBehaviour:
       you or improving upon your other items and abilities.
     entryList:
     - {fileID: 11400000, guid: 5858f4c01fc04af408aab0739a1e4b50, type: 2}
+    - {fileID: 11400000, guid: 455f9b4f1f4e2774fb97c03f4639062a, type: 2}
   - name: Rituals
     description: These powerful spells change the very fabric of reality. Not always
       in your favour.

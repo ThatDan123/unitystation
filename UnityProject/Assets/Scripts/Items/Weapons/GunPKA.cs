@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Weapons;
+using AddressableReferences;
 
 public class GunPKA : Gun
 {
@@ -38,7 +39,7 @@ public class GunPKA : Gun
 		yield return WaitFor.Seconds(rechargeTime);
 		CurrentMagazine.ServerSetAmmoRemains(1);
 		CurrentMagazine.LoadProjectile(Projectile, 1);
-		if (isSuppressed)
+		if (IsSuppressed)
 		{
 			if (serverHolder != null)
 			{
@@ -47,7 +48,7 @@ public class GunPKA : Gun
 		}
 		else
 		{
-			SoundManager.PlayNetworkedAtPos("ReloadKinetic", gameObject.AssumedWorldPosServer(), sourceObj: serverHolder);
+			SoundManager.PlayNetworkedAtPos(SingletonSOSounds.Instance.KineticReload, gameObject.AssumedWorldPosServer(), sourceObj: serverHolder);
 		}
 		allowRecharge = true;
 	}

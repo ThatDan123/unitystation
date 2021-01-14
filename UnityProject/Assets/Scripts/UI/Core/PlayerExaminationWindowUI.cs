@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public class PlayerExaminationWindowUI : MonoBehaviour
 {
-	[SerializeField] private Text playerName;
-	[SerializeField] private Text playerSpecies;
-	[SerializeField] private Text playerJob;
-	[SerializeField] private Text playerStatus;
+	[SerializeField] private Text playerName = default;
+	[SerializeField] private Text playerSpecies = default;
+	[SerializeField] private Text playerJob = default;
+	[SerializeField] private Text playerStatus = default;
 	[Space]
-	[SerializeField] private GameObject expandedView;
-	[SerializeField] private Text additionalInformationsText;
+	[SerializeField] private GameObject expandedView = default;
+	[SerializeField] private Text additionalInformationsText = default;
 
 	private PlayerExaminationWindowSlot[] examinationSlotsUI;
 
@@ -71,7 +71,7 @@ public class PlayerExaminationWindowUI : MonoBehaviour
 	/// </summary>
 	public void OnClickExit()
 	{
-		SoundManager.Play("Click01");
+		SoundManager.Play(SingletonSOSounds.Instance.Click01);
 
 		Reset();
 	}
@@ -81,7 +81,7 @@ public class PlayerExaminationWindowUI : MonoBehaviour
 	/// </summary>
 	public void OnClickExpandCollapse()
 	{
-		SoundManager.Play("Click01");
+		SoundManager.Play(SingletonSOSounds.Instance.Click01);
 
 		expandedView.SetActive(!expandedView.activeSelf);
 	}
@@ -92,19 +92,19 @@ public class PlayerExaminationWindowUI : MonoBehaviour
 	/// <param name="slot">clicket slot</param>
 	public void TryInteract(PlayerExaminationWindowSlot slot)
 	{
-		ItemSlot playerSlot = CurrentOpenStorage.GetNamedItemSlot(slot.UI_ItemSlot.NamedSlot);
+		ItemSlot targetSlot = CurrentOpenStorage.GetNamedItemSlot(slot.UI_ItemSlot.NamedSlot);
 
 		if (slot.IsObscured || slot.IsPocket)
 		{
 			// when player clicks on obscured slot/pocket second time
 			if (slot.IsQuestionMarkActive)
 			{
-				InteractWithOtherPlayersSlot(playerSlot);
+				InteractWithOtherPlayersSlot(targetSlot);
 			}
 			// when player clicks on obscured slot/pocket first time
 			else
 			{
-				if (playerSlot.IsOccupied)
+				if (targetSlot.IsOccupied)
 					slot.SetQuestionMarkActive(true);
 				else
 					slot.SetQuestionMarkActive(false);
@@ -112,30 +112,17 @@ public class PlayerExaminationWindowUI : MonoBehaviour
 		}
 		else
 		{
-			InteractWithOtherPlayersSlot(playerSlot);
+			InteractWithOtherPlayersSlot(targetSlot);
 		}
 	}
 
 	/// <summary>
 	/// TODO interactions
 	/// </summary>
-	private void InteractWithOtherPlayersSlot(ItemSlot playerSlot)
+	private void InteractWithOtherPlayersSlot(ItemSlot targetSlot)
 	{
-		bool isHandEmpty = UIManager.Hands.CurrentSlot.ItemSlot.IsEmpty;
-		bool isTargetSlotEmpty = playerSlot.IsEmpty;
-
-		if (isHandEmpty && !isTargetSlotEmpty)
-		{
-			// TODO: try to take item
-		}
-		else if (!isHandEmpty && isTargetSlotEmpty)
-		{
-			// TODO: try to put item
-		}
-		else if (!isHandEmpty && !isTargetSlotEmpty)
-		{
-			// TODO: try to take item and drop on ground
-		}
+		var playerSlot = UIManager.Hands.CurrentSlot.ItemSlot;
+		OtherPlayerSlotTransferMessage.Send(playerSlot, targetSlot);
 	}
 
 	/// <summary>

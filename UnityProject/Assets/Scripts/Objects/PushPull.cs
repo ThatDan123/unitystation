@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AddressableReferences;
 using UnityEngine;
 using UnityEngine.Events;
 using Mirror;
@@ -164,7 +165,7 @@ public class PushPull : NetworkBehaviour, IRightClickable/*, IServerSpawn*/
 
 	[Tooltip("The sound to play when pushed/pulled")]
 	[SerializeField]
-	private string pushPullSound = null;
+	private AddressableAudioSource pushPullSound = null;
 
 	[Tooltip("A minimum delay for the sound to be played again (in milliseconds)")]
 	[SerializeField]
@@ -381,7 +382,7 @@ public class PushPull : NetworkBehaviour, IRightClickable/*, IServerSpawn*/
 
 			if (pullable.StartFollowing(this))
 			{
-				SoundManager.PlayNetworkedAtPos("Rustle#", pullable.transform.position, sourceObj: pullableObject);
+				SoundManager.PlayNetworkedAtPos(SingletonSOSounds.Instance.Rustle, pullable.transform.position, sourceObj: pullableObject);
 
 				PulledObjectServer = pullable;
 
@@ -768,7 +769,7 @@ public class PushPull : NetworkBehaviour, IRightClickable/*, IServerSpawn*/
 			}
 
 			// If there is a sound to be played
-			if (string.IsNullOrWhiteSpace(pushPullSound) == false && (Time.time * 1000 > lastPlayedSoundTime + soundDelayTime))
+			if (pushPullSound == null && (Time.time * 1000 > lastPlayedSoundTime + soundDelayTime))
 			{
 				SoundManager.PlayNetworkedAtPos(pushPullSound, target, Random.Range(soundMinimumPitchVariance, soundMaximumPitchVariance), sourceObj: gameObject);
 				lastPlayedSoundTime = Time.time * 1000;
@@ -941,7 +942,7 @@ public class PushPull : NetworkBehaviour, IRightClickable/*, IServerSpawn*/
 		// If the pushable's movement in that direction is obstructed, then it can't be pushed.
 		Vector3Int target = pusherPos + intDir;
 		if (MatrixManager.IsPassableAtAllMatrices(pusherPos, target, isServer: serverSide, includingPlayers: IsSolidClient, //non-solid things can be pushed to player tile
-			context: gameObject) == false) 
+			context: gameObject) == false)
 		{
 			return false;
 		}

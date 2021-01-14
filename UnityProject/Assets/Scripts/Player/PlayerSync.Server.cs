@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Doors;
+using Items;
 using UnityEngine;
 using UnityEngine.Events;
 using Objects;
@@ -588,7 +589,7 @@ public partial class PlayerSync
 		if (!playerScript.IsGhost)
 		{
 			playerScript.OnTileReached().Invoke(nextState.WorldPosition.RoundToInt());
-			SoundManager.FootstepAtPosition(nextState.WorldPosition, playerScript.mind.stepType, gameObject);
+			FootstepSounds.PlayerFootstepAtPosition(nextState.WorldPosition, this);
 		}
 
 		return nextState;
@@ -737,7 +738,7 @@ public partial class PlayerSync
 				}
 
 				// if player can't reach, player can't push
-				if (MatrixManager.IsPassableAtAllMatrices(worldOrigin, pushableLocation, isServer: true, includingPlayers: false, 
+				if (MatrixManager.IsPassableAtAllMatrices(worldOrigin, pushableLocation, isServer: true, includingPlayers: false,
 						context: pushable.gameObject, isReach: true) == false)
 				{
 					continue;
@@ -981,6 +982,11 @@ public partial class PlayerSync
 			if (crossedItem.HasTrait(CommonTraits.Instance.Slippery))
 			{
 				registerPlayer.ServerSlip(slipWhileWalking: true);
+				if (crossedItem.HasTrait(CommonTraits.Instance.BluespaceActivity))
+				{
+					//TODO: Replace call with one that passes in potency once potency is trackable
+					registerPlayer.ServerBluespaceActivity();
+				}
 			}
 		}
 	}

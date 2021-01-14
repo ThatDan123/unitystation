@@ -34,7 +34,7 @@ public class ChatRelay : NetworkBehaviour
 		if (Instance == null)
 		{
 			Instance = this;
-			Chat.RegisterChatRelay(Instance, PropagateChatToClients, AddToChatLogClient, AddPrivMessageToClient);
+			Chat.RegisterChatRelay(Instance, PropagateChatToClients, AddToChatLogClient, AddAdminPrivMessageToClient, AddMentorPrivMessageToClient);
 		}
 		else
 		{
@@ -130,7 +130,7 @@ public class ChatRelay : NetworkBehaviour
 				if (!channels.HasFlag(ChatChannel.Binary) || players[i].Script.IsGhost)
 				{
 					UpdateChatMessage.Send(players[i].GameObject, channels, chatEvent.modifiers, chatEvent.message, chatEvent.messageOthers,
-						chatEvent.originator, chatEvent.speaker);
+						chatEvent.originator, chatEvent.speaker, chatEvent.stripTags);
 
 					continue;
 				}
@@ -149,7 +149,7 @@ public class ChatRelay : NetworkBehaviour
 			if (channels != ChatChannel.None)
 			{
 				UpdateChatMessage.Send(players[i].GameObject, channels, chatEvent.modifiers, chatEvent.message, chatEvent.messageOthers,
-					chatEvent.originator, chatEvent.speaker);
+					chatEvent.originator, chatEvent.speaker, chatEvent.stripTags);
 			}
 		}
 
@@ -172,11 +172,19 @@ public class ChatRelay : NetworkBehaviour
 	}
 
 	[Client]
-	private void AddPrivMessageToClient(string message)
+	private void AddAdminPrivMessageToClient(string message)
 	{
 		trySendingTTS(message);
 
 		ChatUI.Instance.AddAdminPrivEntry(message);
+	}
+
+	[Client]
+	private void AddMentorPrivMessageToClient(string message)
+	{
+		trySendingTTS(message);
+
+		ChatUI.Instance.AddMentorPrivEntry(message);
 	}
 
 	[Client]
@@ -193,13 +201,15 @@ public class ChatRelay : NetworkBehaviour
 
 		if (channels != ChatChannel.None)
 		{
+			// TODO: remove hardcoded "You" check; chat bubbles should be on their own channel or similar - see issue #5775.
+
 			// replace action messages with chat bubble
 			if(channels.HasFlag(ChatChannel.Combat) || channels.HasFlag(ChatChannel.Action) || channels.HasFlag(ChatChannel.Examine))
 			{
 				string cleanMessage = Regex.Replace(message, "<.*?>", string.Empty);
 				if(cleanMessage.StartsWith("You"))
 				{
-					ChatBubbleManager.ShowAChatBubble(PlayerManager.LocalPlayerScript.transform, Regex.Replace(message, "<.*?>", string.Empty));
+					ChatBubbleManager.ShowAction(Regex.Replace(message, "<.*?>", string.Empty));
 					return;
 				}
 			}

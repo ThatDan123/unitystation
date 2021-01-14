@@ -6,6 +6,7 @@ using ScriptableObjects;
 using UnityEngine;
 using Systems.Atmospherics;
 using Doors;
+using AddressableReferences;
 
 namespace Objects.Wallmounts
 {
@@ -31,6 +32,7 @@ namespace Objects.Wallmounts
 		[SerializeField]
 		private MultitoolConnectionType conType = MultitoolConnectionType.FireAlarm;
 		public MultitoolConnectionType ConType => conType;
+		[SerializeField] private AddressableAudioSource FireAlarmSFX = null;
 
 		private bool multiMaster = true;
 		public bool MultiMaster => multiMaster;
@@ -56,7 +58,7 @@ namespace Objects.Wallmounts
 			{
 				activated = true;
 				stateSync = FireAlarmState.TopLightSpriteAlert;
-				SoundManager.PlayNetworkedAtPos("FireAlarm", metaNode.Position);
+				SoundManager.PlayNetworkedAtPos(FireAlarmSFX, metaNode.Position);
 				StartCoroutine(SwitchCoolDown());
 				foreach (var firelock in FireLockList)
 				{
@@ -70,7 +72,7 @@ namespace Objects.Wallmounts
 		{
 			var integrity = GetComponent<Integrity>();
 			integrity.OnExposedEvent.AddListener(SendCloseAlerts);
-			AtmosManager.Instance.inGameFireAlarms.Add(this);
+			UpdateManager.Add(UpdateMe, 1);
 			RegisterTile registerTile = GetComponent<RegisterTile>();
 			MetaDataLayer metaDataLayer = MatrixManager.AtPoint(registerTile.WorldPositionServer, true).MetaDataLayer;
 			var wallMount = GetComponent<WallmountBehavior>();
@@ -89,7 +91,7 @@ namespace Objects.Wallmounts
 
 		}
 
-		public void TickUpdate()
+		public void UpdateMe()
 		{
 			if (!activated)
 			{
@@ -102,7 +104,7 @@ namespace Objects.Wallmounts
 
 		public void OnDespawnServer(DespawnInfo info)
 		{
-			AtmosManager.Instance.inGameFireAlarms.Remove(this);
+			UpdateManager.Remove(CallbackType.PERIODIC_UPDATE, UpdateMe);
 		}
 
 		public bool WillInteract(HandApply interaction, NetworkSide side)

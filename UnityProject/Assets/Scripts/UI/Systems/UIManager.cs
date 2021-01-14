@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using UI.Core.Windows;
+using UI.Windows;
 
 public class UIManager : MonoBehaviour, IInitialise
 {
@@ -28,7 +29,7 @@ public class UIManager : MonoBehaviour, IInitialise
 	public PlayerExaminationWindowUI playerExaminationWindow;
 	public ControlIntent intentControl;
 	public PlayerHealthUI playerHealthUI;
-	public PlayerListUI playerListUIControl;
+	public StatsTab statsTab;
 	public Text toolTip;
 	public Text pingDisplay;
 	[SerializeField]
@@ -36,6 +37,7 @@ public class UIManager : MonoBehaviour, IInitialise
 	public Text versionDisplay;
 	public GUI_Info infoWindow;
 	public TeleportWindow teleportWindow;
+	[SerializeField] private GhostRoleWindow ghostRoleWindow = default;
 	public UI_StorageHandler storageHandler;
 	public BuildMenu buildMenu;
 	public ZoneSelector zoneSelector;
@@ -44,6 +46,7 @@ public class UIManager : MonoBehaviour, IInitialise
 	public GamePad gamePad;
 	public AnimationCurve strandedZoomOutCurve;
 	public AdminChatButtons adminChatButtons;
+	public AdminChatButtons mentorChatButtons;
 	public AdminChatWindows adminChatWindows;
 	public ProfileScrollView profileScrollView;
 	public PlayerAlerts playerAlerts;
@@ -68,7 +71,7 @@ public class UIManager : MonoBehaviour, IInitialise
 
 	///Global flag for focused input field. Movement keystrokes are ignored if true.
 	/// <see cref="InputFieldFocus"/> handles this flag automatically
-	public static bool IsInputFocus
+	public static bool IsInputFocus 
 	{
 		get { return Instance && Instance.isInputFocus; }
 		set
@@ -156,7 +159,7 @@ public class UIManager : MonoBehaviour, IInitialise
 	public static ControlDisplays Display => Instance.displayControl;
 	public static ControlClothing ControlClothing => Instance.controlClothing;
 
-	public static PlayerListUI PlayerListUI => Instance.playerListUIControl;
+	public static StatsTab StatsTab => Instance.statsTab;
 
 	public static UI_StorageHandler StorageHandler
 	{
@@ -177,6 +180,7 @@ public class UIManager : MonoBehaviour, IInitialise
 	public static GUI_Info InfoWindow => Instance.infoWindow;
 
 	public static TeleportWindow TeleportWindow => Instance.teleportWindow;
+	public static GhostRoleWindow GhostRoleWindow => Instance.ghostRoleWindow;
 
 	private float pingUpdate;
 
@@ -245,6 +249,7 @@ public class UIManager : MonoBehaviour, IInitialise
 		}
 
 		adminChatButtons.transform.parent.gameObject.SetActive(false);
+		mentorChatButtons.transform.parent.gameObject.SetActive(false);
 		SetVersionDisplay = $"Work In Progress {GameData.BuildNumber}";
 	}
 
@@ -285,6 +290,7 @@ public class UIManager : MonoBehaviour, IInitialise
 	void OnSceneChange(Scene oldScene, Scene newScene)
 	{
 		adminChatButtons.ClearAllNotifications();
+		mentorChatButtons.ClearAllNotifications();
 		adminChatWindows.ResetAll();
 		playerAlerts.ClearLogs();
 	}

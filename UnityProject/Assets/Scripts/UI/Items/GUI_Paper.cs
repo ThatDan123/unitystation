@@ -9,14 +9,12 @@ public class GUI_Paper : NetTab
 {
 	[SerializeField]
 	private TMP_InputField textField = default;
-	[SerializeField]
-	private ContentSizeFitter contentSizeFitter = default;
 
 	public override void OnEnable()
 	{
 		base.OnEnable();
 		StartCoroutine(WaitForProvider());
-		textField.interactable = false;
+		textField.readOnly = true;
 	}
 
 	IEnumerator WaitForProvider()
@@ -51,12 +49,12 @@ public class GUI_Paper : NetTab
 	{
 		if (!IsPenInHand())
 		{
-			textField.interactable = false;
+			textField.readOnly = true;
 			return;
 		}
 		else
 		{
-			textField.interactable = true;
+			textField.readOnly = false;
 			textField.ActivateInputField();
 		}
 		UIManager.IsInputFocus = true;
@@ -96,12 +94,5 @@ public class GUI_Paper : NetTab
 		PlayerManager.LocalPlayerScript.playerNetworkActions.CmdRequestPaperEdit(Provider.gameObject, textField.text);
 		UIManager.IsInputFocus = false;
 		UIManager.PreventChatInput = false;
-	}
-
-	public void OnTextValueChange()
-	{
-		//Only way to refresh it to get it to do its job (unity bug):
-		contentSizeFitter.enabled = false;
-		contentSizeFitter.enabled = true;
 	}
 }

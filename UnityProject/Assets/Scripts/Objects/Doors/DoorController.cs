@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AddressableReferences;
 using UnityEngine;
 using Mirror;
 using ScriptableObjects;
@@ -26,7 +27,10 @@ namespace Doors
 
 		private int closedLayer;
 		private int closedSortingLayer;
-		public string openSFX = "AirlockOpen", closeSFX = "AirlockClose";
+
+		public AddressableAudioSource openSFX;
+
+		public AddressableAudioSource closeSFX;
 
 		private IEnumerator coWaitOpened;
 		private IEnumerator coBlockAutomaticClosing;
@@ -62,7 +66,6 @@ namespace Doors
 		private MultitoolConnectionType conType = MultitoolConnectionType.DoorButton;
 		public MultitoolConnectionType ConType => conType;
 
-		public DoorSwitch connectedDoorSwitch;
 		public void SetMaster(ISetMultitoolMaster Imaster)
 		{
 			var doorSwitch = (Imaster as DoorSwitch);

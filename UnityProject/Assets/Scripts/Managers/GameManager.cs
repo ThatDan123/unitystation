@@ -13,9 +13,12 @@ using DiscordWebhook;
 using Mirror;
 using GameConfig;
 using Initialisation;
+using AddressableReferences;
+using Managers;
 
 public partial class GameManager : MonoBehaviour, IInitialise
 {
+
 	public static GameManager Instance;
 	public bool counting;
 	/// <summary>
@@ -66,6 +69,11 @@ public partial class GameManager : MonoBehaviour, IInitialise
 	/// If true, it will allow shuttles from dealing 9001 damage and instantly gibbing people when crashed
 	/// </summary>
 	public bool ShuttleGibbingAllowed { get; set; }
+
+	/// <summary>
+	/// If true, only admins who put http/https links in OOC will be allowed
+	/// </summary>
+	public bool AdminOnlyHtml { get; set; }
 
 	/// <summary>
 	/// The game mode that the server will switch to at round end if no mode or an invalid mode is selected.
@@ -151,9 +159,11 @@ public partial class GameManager : MonoBehaviour, IInitialise
 		RoundsPerMap = GameConfigManager.GameConfig.RoundsPerMap;
 		InitialGameMode = GameConfigManager.GameConfig.InitialGameMode;
 		RespawnAllowed = GameConfigManager.GameConfig.RespawnAllowed;
+		RespawnCurrentlyAllowed = RespawnAllowed;
 		ShuttleDepartTime = GameConfigManager.GameConfig.ShuttleDepartTime;
 		GibbingAllowed = GameConfigManager.GameConfig.GibbingAllowed;
 		ShuttleGibbingAllowed = GameConfigManager.GameConfig.ShuttleGibbingAllowed;
+		AdminOnlyHtml = GameConfigManager.GameConfig.AdminOnlyHtml;
 		Physics.autoSimulation = false;
 		Physics2D.simulationMode = SimulationMode2D.Script;
 	}
@@ -363,7 +373,7 @@ public partial class GameManager : MonoBehaviour, IInitialise
 			PendingSpaceBodies = new Queue<MatrixMove>();
 
 			CurrentRoundState = RoundState.PreRound;
-			EventManager.Broadcast(EVENT.PreRoundStarted);
+			EventManager.Broadcast(EVENT.PreRoundStarted, true);
 
 			// Wait for the PlayerList instance to init before checking player count
 			StartCoroutine(WaitToCheckPlayers());
@@ -384,7 +394,14 @@ public partial class GameManager : MonoBehaviour, IInitialise
 	{
 		foreach (var s in iServerSpawns)
 		{
-			s.OnSpawnServer(SpawnInfo.Mapped(((Component)s).gameObject));
+			try
+			{
+				s.OnSpawnServer(SpawnInfo.Mapped(((Component) s).gameObject));
+			}
+			catch (Exception e)
+			{
+				Logger.LogErrorFormat("Exception message on map loading: {0}", Category.ItemSpawn, e.Message);
+			}
 		}
 	}
 
@@ -447,6 +464,7 @@ public partial class GameManager : MonoBehaviour, IInitialise
 			}
 
 			CurrentRoundState = RoundState.Ended;
+			EventManager.Broadcast(EVENT.RoundEnded, true);
 			counting = false;
 
 			GameMode.EndRound();
@@ -454,7 +472,8 @@ public partial class GameManager : MonoBehaviour, IInitialise
 
 			if (SystemInfo.graphicsDeviceType != GraphicsDeviceType.Null && !GameData.Instance.testServer)
 			{
-				SoundManager.Instance.PlayRandomRoundEndSound();
+				//Jester
+				//SoundManager.Instance.PlayRandomRoundEndSound();
 			}
 		}
 	}
@@ -672,10 +691,10 @@ public partial class GameManager : MonoBehaviour, IInitialise
 	IEnumerator ServerRoundRestart()
 	{
 		Logger.Log("Server restarting round now.", Category.Round);
-		Chat.AddGameWideSystemMsgToChat("The round is now restarting...");
+		Chat.AddGameWideSystemMsgToChat("<b>The round is now restarting...</b>");
 
 		//Notify all clients that the round has ended
-		ServerToClientEventsMsg.SendToAll(EVENT.RoundEnded);
+		TriggerEventMessage.SendToAll(EVENT.RoundEnded);
 
 		yield return WaitFor.Seconds(0.2f);
 
