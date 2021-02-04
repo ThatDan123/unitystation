@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: 8224268276445300722}
   - component: {fileID: 4509690511415981971}
   - component: {fileID: 7462652771900818951}
+  - component: {fileID: -2348809968131218930}
   - component: {fileID: 1902345665415690204}
   m_Layer: 31
   m_Name: AI
@@ -120,6 +121,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   playerMove: {fileID: 3920682320074774566}
+  playerScript: {fileID: 0}
+  Step: 0
 --- !u!114 &843330595842111116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +230,19 @@ MonoBehaviour:
   AimApplyInterval: 0.01
   examineCursor: {fileID: 0}
   cursorOffset: {x: 0, y: 0}
+--- !u!114 &-2348809968131218930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4390267312333422610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1d7861cc0289714b8989f7181986a18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fieldOfView: 360
 --- !u!114 &1902345665415690204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +358,7 @@ MonoBehaviour:
   NetworkThis: 1
   SubCatalogue: []
   PresentSpriteSet: {fileID: 11400000, guid: 03a80d3c933efc34685a9442cbb919e9, type: 2}
+  randomInitialSprite: 0
   pushTextureOnStartUp: 1
   variantIndex: 0
   palette: []

@@ -14,6 +14,7 @@ public class LightingSystem : MonoBehaviour
 	/// Assumption that it may be changed during game. Otherwise it should be moved in to rendering settings.
 	/// </summary>
 	public Vector3 fovCenterOffset;
+	public Vector3 otherFOV;
 	public float fovDistance;
 	public RenderSettings renderSettings;
 	public MaterialContainer materialContainer;
@@ -453,10 +454,10 @@ public class LightingSystem : MonoBehaviour
 			// This step will result in two masks: floorOcclusionMask used later in light mixing, and floorWallOcclusionMask which is only used for calculating
 			// objects / wallmounts sprite visibility.
 			Vector3 _fovCenterInWorldSpace = transform.TransformPoint(fovCenterOffset);
-			Vector3 _fovCenterOffsetInViewSpace = mMainCamera.WorldToViewportPoint(_fovCenterInWorldSpace) - new Vector3(0.5f, 0.5f, 0);
-			Vector3 _fovCenterOffsetInExtendedViewSpace = _fovCenterOffsetInViewSpace * (float)operationParameters.cameraOrthographicSize / mOcclusionPPRT.orthographicSize;
 
-			mPostProcessingStack.GenerateFovMask(mOcclusionPPRT, floorOcclusionMask, wallFloorOcclusionMask, renderSettings, _fovCenterOffsetInExtendedViewSpace, fovDistance, operationParameters);
+			GenerateFOV(_fovCenterInWorldSpace);
+
+			GenerateFOV(transform.TransformPoint(otherFOV));
 
 			if (!renderSettings.disableAsyncGPUReadback && SystemInfo.supportsAsyncGPUReadback)
 			{
@@ -493,6 +494,14 @@ public class LightingSystem : MonoBehaviour
 		}
 
 		// Note: After execution of this method, MainCamera.Render will be executed and scene will be drawn.
+	}
+
+	private void GenerateFOV(Vector3 _fovCenterInWorldSpace)
+	{
+		Vector3 _fovCenterOffsetInViewSpace = mMainCamera.WorldToViewportPoint(_fovCenterInWorldSpace) - new Vector3(0.5f, 0.5f, 0);
+		Vector3 _fovCenterOffsetInExtendedViewSpace = _fovCenterOffsetInViewSpace * (float)operationParameters.cameraOrthographicSize / mOcclusionPPRT.orthographicSize;
+
+		mPostProcessingStack.GenerateFovMask(mOcclusionPPRT, floorOcclusionMask, wallFloorOcclusionMask, renderSettings, _fovCenterOffsetInExtendedViewSpace, fovDistance, operationParameters);
 	}
 
 	/// <summary>

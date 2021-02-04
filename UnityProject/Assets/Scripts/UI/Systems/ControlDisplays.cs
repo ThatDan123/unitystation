@@ -104,13 +104,13 @@ public class ControlDisplays : MonoBehaviour
 		}
 
 		//Turn off old UI
-		currentHud.SetActive(false);
+		ToggleCurrentHud(false);
 
 		PlayerManager.LocalPlayerScript.Ui = newUi;
 		currentHud = newUi;
 
 		//Turn on new UI
-		currentHud.SetActive(true);
+		ToggleCurrentHud(true);
 
 		UIManager.PlayerHealthUI.gameObject.SetActive(true);
 		panelRight.gameObject.SetActive(true);
@@ -195,7 +195,7 @@ public class ControlDisplays : MonoBehaviour
 		ResetUI(); //Make sure UI is back to default for next play
 		UIManager.PlayerHealthUI.gameObject.SetActive(false);
 		UIActionManager.Instance.OnRoundEnd();
-		currentHud.SetActive(false);
+		ToggleCurrentHud(false);
 		panelRight.gameObject.SetActive(false);
 		rightClickManager.SetActive(false);
 		jobSelectWindow.SetActive(false);
@@ -208,7 +208,7 @@ public class ControlDisplays : MonoBehaviour
 
 	public void SetScreenForGame()
 	{
-		currentHud.SetActive(false);
+		ToggleCurrentHud(false);
 		UIManager.PlayerHealthUI.gameObject.SetActive(true);
 		panelRight.gameObject.SetActive(true);
 		rightClickManager.SetActive(false);
@@ -222,7 +222,7 @@ public class ControlDisplays : MonoBehaviour
 	{
 		ResetUI(); //Make sure UI is back to default for next play
 		UIManager.PlayerHealthUI.gameObject.SetActive(false);
-		currentHud.SetActive(false);
+		ToggleCurrentHud(false);
 		panelRight.gameObject.SetActive(false);
 		rightClickManager.SetActive(false);
 		jobSelectWindow.SetActive(false);
@@ -237,7 +237,7 @@ public class ControlDisplays : MonoBehaviour
 	{
 		ResetUI(); //Make sure UI is back to default for next play
 		UIManager.PlayerHealthUI.gameObject.SetActive(false);
-		currentHud.SetActive(false);
+		ToggleCurrentHud(false);
 		panelRight.gameObject.SetActive(false);
 		rightClickManager.SetActive(false);
 		jobSelectWindow.SetActive(false);
@@ -261,5 +261,12 @@ public class ControlDisplays : MonoBehaviour
 	public void PlayStrandedVideo()
 	{
 		uiAnimator.Play("StrandedVideo");
+	}
+
+	private void ToggleCurrentHud(bool toggle)
+	{
+		if (currentHud == null) return;
+
+		currentHud.SetActive(toggle);
 	}
 }

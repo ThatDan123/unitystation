@@ -265,6 +265,8 @@ public class UI_ItemSlot : TooltipMonoBehaviour
 
 	public void Reset()
 	{
+		if(image == null) return;
+
 		image.ClearAll();
 		if (amountText)
 		{
