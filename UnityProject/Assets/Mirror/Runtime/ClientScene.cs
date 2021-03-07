@@ -18,28 +18,9 @@ namespace Mirror
     public static class ClientScene
     {
         static bool isSpawnFinished;
-        static NetworkIdentity _localPlayer;
 
-        /// <summary>
-        /// NetworkIdentity of the localPlayer
-        /// </summary>
-        public static NetworkIdentity localPlayer
-        {
-            get => _localPlayer;
-            private set
-            {
-                NetworkIdentity oldPlayer = _localPlayer;
-                NetworkIdentity newPlayer = value;
-                if (oldPlayer != newPlayer)
-                {
-                    _localPlayer = value;
-                    onLocalPlayerChanged?.Invoke(oldPlayer, newPlayer);
-                }
-            }
-        }
-
-        public delegate void LocalplayerChanged(NetworkIdentity oldPlayer, NetworkIdentity newPlayer);
-        public static event LocalplayerChanged onLocalPlayerChanged;
+        /// <summary> NetworkIdentity of the localPlayer </summary>
+        public static NetworkIdentity localPlayer { get; private set; }
 
         /// <summary>
         /// Returns true when a client's connection has been set to ready.
@@ -350,6 +331,8 @@ namespace Mirror
         /// <param name="newAssetId">An assetId to be assigned to this GameObject. This allows a dynamically created game object to be registered for an already known asset Id.</param>
         /// <param name="spawnHandler">A method to use as a custom spawnhandler on clients.</param>
         /// <param name="unspawnHandler">A method to use as a custom un-spawnhandler on clients.</param>
+        // NOTE: registering with assetId is useful for assetbundles etc. a lot
+        //       of people use this.
         public static void RegisterPrefab(GameObject prefab, Guid newAssetId, SpawnDelegate spawnHandler, UnSpawnDelegate unspawnHandler)
         {
             // We need this check here because we don't want a null handler in the lambda expression below
@@ -1027,7 +1010,8 @@ namespace Mirror
         {
             if (identity == localPlayer)
             {
-                // Set isLocalPlayer to true on this NetworkIdentity and trigger OnStartLocalPlayer in all scripts on the same GO
+                // Set isLocalPlayer to true on this NetworkIdentity and trigger
+                // OnStartLocalPlayer in all scripts on the same GO
                 identity.connectionToServer = readyConnection;
                 identity.OnStartLocalPlayer();
 

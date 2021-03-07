@@ -535,13 +535,6 @@ namespace Mirror
         /// <param name="dirtyBit">Bit mask to set.</param>
         public void SetDirtyBit(ulong dirtyBit)
         {
-            //CUSTOM UNITYSTATION CODE//
-            if (netIdentity != null)
-            {
-                netIdentity.isDirty = true;
-            }
-            ///////////////////////////
-
             syncVarDirtyBits |= dirtyBit;
         }
 
