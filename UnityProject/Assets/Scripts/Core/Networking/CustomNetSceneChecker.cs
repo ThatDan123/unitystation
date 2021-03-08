@@ -3,14 +3,14 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CustomNetSceneChecker : NetworkVisibility
+public class CustomNetSceneChecker : MonoBehaviour
 {
 	//TODO this component has now been added to all
 	//spawnable prefabs. It is a placeholder to be used for
 	//scene observer rebuilding when we start to prevent connections
 	//from observing scenes that they are not apart of
 
-	public override bool OnCheckObserver(NetworkConnection conn)
+	public bool OnCheckObserver(NetworkConnection conn)
 	{
 		//CUSTOM UNITYSTATION CODE//
 		if (NetworkServer.observerSceneList.ContainsKey(conn) &&
@@ -22,7 +22,7 @@ public class CustomNetSceneChecker : NetworkVisibility
 		return SceneManager.GetActiveScene() == gameObject.scene;
 	}
 
-	public override void OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
+	public void OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
 	{
 		//CUSTOM UNITYSTATION CODE//
 		foreach (var obs in NetworkServer.observerSceneList)
@@ -42,7 +42,7 @@ public class CustomNetSceneChecker : NetworkVisibility
 		}
 	}
 
-	public override void OnSetHostVisibility(bool visible)
+	public void OnSetHostVisibility(bool visible)
 	{
 		//CUSTOM UNITYSTATION CODE//
 		//Reenable when testing out proximity stuff so that it works in editor as host

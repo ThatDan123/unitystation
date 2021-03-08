@@ -12,7 +12,7 @@ using UI.CharacterCreator;
 public partial class PlayerList : NetworkBehaviour
 {
 	//ConnectedPlayer list, server only
-	private List<ConnectedPlayer> loggedIn = new List<ConnectedPlayer>();
+	public List<ConnectedPlayer> loggedIn = new List<ConnectedPlayer>();
 	public List<ConnectedPlayer> loggedOff = new List<ConnectedPlayer>();
 
 	//For client needs: updated via UpdateConnectedPlayersMessage, useless for server

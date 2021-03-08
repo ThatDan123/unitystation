@@ -237,6 +237,7 @@ public class RegisterTile : NetworkBehaviour, IServerDespawn
 		cnt = GetComponent<CustomNetTransform>();
 		matrixRotationHooks = GetComponents<IMatrixRotation>();
 		fireExposables = GetComponents<IFireExposable>();
+		var id = netIdentity;
 	}
 
 

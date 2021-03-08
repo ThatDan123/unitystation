@@ -1649,6 +1649,12 @@ namespace Mirror
         // both worlds without any worrying now!
         public static void RebuildObservers(NetworkIdentity identity, bool initialize)
         {
+	        //CUSTOM UNITYSTATION CODE//
+	        if (identity == null)
+	        {
+		        return;
+	        }
+
             // observers are null until OnStartServer creates them
             if (identity.observers == null)
                 return;

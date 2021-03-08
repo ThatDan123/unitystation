@@ -102,6 +102,9 @@ namespace Messages.Server
 		/// <returns></returns>
 		public static void Send(IEnumerable<GameObject> recipients, ItemSlot itemSlot)
 		{
+			if (itemSlot == null) return;
+			if (itemSlot.ItemStorage == null) return;
+
 			NetMessage msg = new NetMessage
 			{
 				Storage = itemSlot.ItemStorageNetID,
